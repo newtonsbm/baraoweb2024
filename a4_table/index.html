@@ -5,8 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
   <style>
+
+    :root {
+      --color-primary: red;
+      --color-secondary: blue;
+    }
+
     #menu {
-      background-color: pink;
+      background-color: var(--color-secondary);
     }
 
     .table-simples>a{
@@ -17,8 +23,18 @@
       background-color: red;
     }
     #menu li:hover {
-      background-color: yellow;s
+      background-color: yellow;
     }
+
+    .table-primary {
+      background-color: pink;
+      border: 2px solid red;
+    }
+
+    .table-primary tr:hover{
+      background-color: yellow;
+    }
+
   </style>
 </head>
 <body>
@@ -33,33 +49,47 @@
   <div class="table-simples">
     <h2 class="titulo">Tabelinha <strong class="negrito">Simples</strong></h2> 
     <a href="">Link Direto</a>
-    <table>
+    <table class="table-primary" border="2">
       <thead>
         <tr>
-          <th><a href="">Nome</a></th>
-          <th>Idade</th>
+          <th rowspan="2">Padarias</th>
+          <th colspan="2">Clientes</th>
+          <th rowspan="2">Total</th>
+        </tr>
+        <tr>
+          <th>Quantidadeo</th>
+          <th>Valor Medio</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>Joao</td>
-          <td>23</td>
+          <td>Pao Bom</td>
+          <td>250</td>
+          <td>R$100o</td>
+          <td>R$25000</td>
         </tr>
+ 
         <tr>
-          <td>Joao</td>
-          <td>23</td>
+          <td>Pao Bom</td>
+          <td>250</td>
+          <td>R$100o</td>
+          <td>R$25000</td>
         </tr>
+ 
         <tr>
-          <td>Joao</td>
-          <td>23</td>
+          <td>Pao Bom</td>
+          <td>250</td>
+          <td>R$100o</td>
+          <td>R$25000</td>
         </tr>
+ 
         <tr>
-          <td>Joao</td>
-          <td>23</td>
+          <td>Pao Bom</td>
+          <td>250</td>
+          <td>R$100o</td>
+          <td>R$25000</td>
         </tr>
       </tbody>
-      <tfoot> 
-      </tfoot>
     </table>
 
 
