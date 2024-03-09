@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid Layout</title>
+  <style>
+    #grid-container {
+      display: grid;
+      grid-template-areas: 
+        "banner banner banner banner banner"
+        "featured unit unit unit item"
+      ;
+    }
+
+    /* #grid-container {
+      display: grid; 
+      grid-template-columns: 3fr 1fr 2fr; 
+      grid-template-rows:  1fr 1fr;
+      gap: -1rem;
+    } */
+    .banner {
+      background-color: lightblue;
+      padding: 2rem;
+      grid-area: banner;
+      /* grid-column: 1 / 4; */
+    }
+    .featured {
+      background-color: lightgreen;
+      padding: 2rem;
+      grid-area: featured;
+      /* grid-column: 2 / 4; */
+      /* grid-row: 3 / 4; */
+    }
+    .unit {
+      background-color: lightgray;
+      padding: 2rem;
+      grid-area: unit;
+    }
+    .item {
+      background-color: lightcoral;
+      padding: 2rem;
+      border: 1px solid black;
+      grid-area: item;
+    }
+  </style>
+
+</head>
+<body>
+  <div id="grid-container">
+    <div class="banner">BANNER</div>
+    <div class="featured">FEATURED</div>
+    <div class="unit">UNIT</div>
+    <div class="item">ITEM</div>
+</body>
+</html>
