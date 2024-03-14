@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flexbox Layout</title>
+</head>
+<body>
+  <h1>Flexbox Layout</h1> 
+  <h2>Flex Propriedades do FLEX CONTAINER</h2>
+  <style>
+    #container1 {
+      width: 90%;
+      margin: 0 auto;
+      height: 400px;
+      outline: 2px solid black;
+      background-color: lightblue;
+      display: flex;
+      /*--- FLEX-DIRECTION ---*/
+      flex-direction: row;
+        /* flex-direction: row | row-reverse | colum | column-rever; */
+
+      /*--- FLEX-WRAP ---*/
+      flex-wrap: wrap;
+        /* flex-wrap: wrap (cai pra baixo) | wrap-reverse (cai pra cima!) */
+
+      /*--- JUSTIFY-CONTENT ---*/
+      /* Alinhamento do conteúdo ao longo da direção (eixo) principal */
+      justify-content: flex-start;
+        /* justify-content: flex-star | flex-end | center | space-between | space-around | space-evenly */
+      
+      /*--- ALIGN-ITEMS ---*/
+      /* Alinhamento dos items ao longo da direção (eixo) transversal*/
+      align-items: stretch;
+        /* align-items: flex-start | flex-end | center | stretch */
+
+      /*--- ALIGN-CONTENT ---*/
+      /* Alinhamento das linhas ao longo da direção (eixo) transversal 
+        só faz sentido se houver mais de uma linha (wrap)
+      */
+      align-content: stretch; 
+        /* align-content: flex-start | flex-end | center | space-between | space-around | stretch */
+    }
+      #container1 .item{
+        background-color: lightcoral;
+        padding: 1rem;
+        margin: 0.5rem;
+        outline: 1px solid black;
+      }
+  </style>
+  <section id="container1">
+    <div class="item">Div 1</div>
+    <div class="item">Div 2 do meio</div>
+    <div class="item">Div 3 fim</div>
+  </section>
+
+  <style>
+    #container2 {
+      width: 90%;
+      margin: 0 auto;
+      height: 400px;
+      outline: 2px solid black;
+      background-color: lightblue;
+      display: flex;
+    }
+      #container2 .item {
+        background-color: lightcoral;
+        padding: 1rem;
+        margin: 0.5rem;
+        outline: 1px solid black;
+        /* FLEX-BASIS */
+        /* Define o tamanho base/inicial do item */
+        flex-basis: 20px;
+
+        /* FLEX-GROW */
+        /* Define a capacidade de crescimento do item relativo aos outros */
+        /* flex-grow: 1; */
+
+        /* ORDER */
+        /* Define a ordem de exibição dos itens relativo aos outros */
+        order:1;
+
+      }
+      #container2 .item1 {
+        /* flex-grow: 2; */
+        /* order: 3; */
+      }
+      #container2 .item2 {
+        /* order: 2; */
+
+        /* ALIGN-SELF */
+        /* Alinhamento do item ao longo do eixo transversal*/
+        /* align-self: center; */
+
+      }
+  </style>
+  <h2>Flex Propriedades do FLEX ITEM</h2>
+  <section id="container2">
+    <div class="item item1">Div 1</div>
+    <div class="item item2">Div 2 do meio</div>
+    <div class="item item3">Div 3 fim</div>
+    <div class="item item4">Div 4 quatro</div>
+    <div class="item item5">Div 5</div>
+  </section>
+</body>
+</html>
