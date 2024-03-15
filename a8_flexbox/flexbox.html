@@ -17,28 +17,27 @@
       background-color: lightblue;
       display: flex;
       /*--- FLEX-DIRECTION ---*/
-      flex-direction: row;
-        /* flex-direction: row | row-reverse | colum | column-rever; */
 
       /*--- FLEX-WRAP ---*/
       flex-wrap: wrap;
         /* flex-wrap: wrap (cai pra baixo) | wrap-reverse (cai pra cima!) */
-
+      /* gap: 3rem; */
       /*--- JUSTIFY-CONTENT ---*/
       /* Alinhamento do conteúdo ao longo da direção (eixo) principal */
-      justify-content: flex-start;
+      justify-content: center;
+      gap:10px;
         /* justify-content: flex-star | flex-end | center | space-between | space-around | space-evenly */
       
       /*--- ALIGN-ITEMS ---*/
       /* Alinhamento dos items ao longo da direção (eixo) transversal*/
-      align-items: stretch;
+      align-items: center;
         /* align-items: flex-start | flex-end | center | stretch */
 
       /*--- ALIGN-CONTENT ---*/
       /* Alinhamento das linhas ao longo da direção (eixo) transversal 
         só faz sentido se houver mais de uma linha (wrap)
       */
-      align-content: stretch; 
+      /* align-content: center;  */
         /* align-content: flex-start | flex-end | center | space-between | space-around | stretch */
     }
       #container1 .item{
@@ -70,7 +69,7 @@
         outline: 1px solid black;
         /* FLEX-BASIS */
         /* Define o tamanho base/inicial do item */
-        flex-basis: 20px;
+        flex-basis: 40px;
 
         /* FLEX-GROW */
         /* Define a capacidade de crescimento do item relativo aos outros */
@@ -83,10 +82,10 @@
       }
       #container2 .item1 {
         /* flex-grow: 2; */
-        /* order: 3; */
+        order: 2;
       }
       #container2 .item2 {
-        /* order: 2; */
+        order: 3;
 
         /* ALIGN-SELF */
         /* Alinhamento do item ao longo do eixo transversal*/
