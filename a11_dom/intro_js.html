@@ -65,6 +65,9 @@
   <pre>
     <code>
       document.querySelector('seletor-do-elemento');
+      document.querySelector('#menuPrincipal')
+      document.querySelector('div.card')
+      document.querySelector('div p.lead')
     </code>
   </pre>
 
@@ -183,7 +186,7 @@
     }
   </style>
   <div class="box">
-    Caixinha magina
+    Caixinha mágica
     <button onclick="addClassVerde(this.parentElement)"> Add Class Verde </button>
     <button onclick="this.parentElement.classList.remove('verde')"> Remove Class Verde</button>
     <button onclick="toggleClassVermelha(this.parentElement)"> Toggle Class Vermelha </button>
@@ -193,9 +196,6 @@
   console.log("Javascript interno no final do arquivo!");
   function addClassVerde(box) {
     box.classList.add('verde');
-  }
-  function toggleClassVermelha(box) {
-    box.classList.toggle('vermelho');
   }
 </script>
 </body>
