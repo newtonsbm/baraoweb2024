@@ -5,3 +5,11 @@ No seu repositório de atividades criar uma pasta chamada a11-gamejam
 - Não usar libs de jogos específicas como Phaser, etc.
 - Pode usar libs CSS
 
+Exemplos de jogos simples:
+- Idealmente pensar num jogo simples e criativo mas alguns exemplos:
+  - Jogo da velha
+  - Jogo da memória
+  - Forca
+  - Três ou um
+  - Par ou impar
+  - etc.
