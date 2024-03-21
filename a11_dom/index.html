@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculando Produto</title>
+  <link rel="stylesheet" href="https://unpkg.com/mvp.css"> 
+</head>
+<body>
+  <h1>Novo Pedido</h1>
+  <fieldset>
+    <legend>Calcular valor de Produto</legend>
+    <div class="form-input">
+      <label for="nome">Nome do produto: </label>
+      <input type="text" id="nome">
+    </div>
+    <div class="form-input">
+      <label for="preco-unitario">Preço unitário</label>
+      <input type="number" min="0" id="preco-unitario">
+    </div>
+    <div class="form-input">
+      <label for="quantidade">Quantidade</label>
+      <input type="number" min="0" step="1" id="quantidade">
+    </div>
+    <div class="form-input">
+      <label for="taxa-servico">Taxa de serviço (%)</label>
+      <input type="number" min="0" max="1" step="0.01" id="taxa-servico">
+    </div>
+    <button>CALCULAR</button>
+  </fieldset>
+  <p>
+    <strong>Valor total do produto: </strong>
+    <span id="valor-total"></span>
+  </p>
+  <script>
+    /**
+     * 1. Criar uma função que recebe o preço unitario de um produto, a quantidade e o taxa de serviço
+     * 2. Calcular o valor total do produto como sendo = (preço unitario * quantidade * ( 1 + taxa de serviço ))
+     * 3. Apresentar o valor para o usuario
+     */
+    function calcularValorTotal(precoUnitario, quantidade, taxaServico) {
+      const valorTotal = precoUnitario * quantidade * (1 + taxaServico);
+      return valorTotal;
+    }
+
+    function calcular() {
+      const nome = document.getElementById('nome').value;
+      // convert to float number
+      const precoUnitario = parseFloat(document.getElementById('preco-unitario').value);
+      const quantidade = parseInt(document.getElementById('quantidade').value);
+      const taxaServico = parseFloat(document.getElementById('taxa-servico').value);
+
+      const valorTotal = calcularValorTotal(precoUnitario, quantidade, taxaServico);
+      document.getElementById('valor-total').innerText = `R$ ${valorTotal}`;
+    }
+
+    document.querySelector('button').addEventListener('click', calcular);
+  </script>
+</body>
+</html>

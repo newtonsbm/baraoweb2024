@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Introdução ao Javascript</title>
+  <link rel="stylesheet" href="https://unpkg.com/mvp.css"> 
+  <script src="./script.js"></script>
+</head>
+<body>
+<main>
+  <h1>Javascript Vanilla!</h1>
+  <h2>Incluindo JS no arquivo HTML</h2>
+  <ul>
+    <li>Inline</li>
+    <li>Interno</li>
+    <li>Externo</li>
+  </ul>
+  <h3>Inline:</h3>  
+    <button onclick="alert('Js Inline!')">JS Inline!</button>
+    <pre>
+      <code>
+        &lt;button onclick="alert('Olá, mundo!')"&gt;Clique em mim&lt;/button&gt;
+      </code>
+    </pre>
+  <h3>Interno:</h3>
+    <pre>
+      <code>
+        &lt;script&gt;
+          alert('Olá, mundo!');
+        &lt;/script&gt;
+      </code>
+    </pre>
+  <h3>Externo:</h3>
+    <pre>
+      <code>
+        &lt;script src="script.js"&gt;&lt;/script&gt;
+      </code>
+    </pre>
+  </p>
+
+  <!-- Selecionando Elementos com JS -->
+
+  <h2>Selecionando Elementos com JS</h2>
+
+  <h3>Por ID</h3>
+  <pre>
+    <code>
+      document.getElementById('id-do-elemento');
+    </code>
+  </pre>
+  <h3>Por Tag</h3>
+  <pre>
+    <code>
+      document.getElementsByTagName('tag-do-elemento');
+    </code>
+  </pre>
+  <h3>Por Classe</h3>
+  <pre>
+    <code>
+      document.getElementsByClassName('classe-do-elemento');
+    </code>
+  </pre>
+  <h3>Por Seletor</h3>
+  <pre>
+    <code>
+      document.querySelector('seletor-do-elemento');
+    </code>
+  </pre>
+
+  <!-- Criando novos elementos -->
+
+  <h2>Criando novos elementos</h2>
+  <pre>
+    <code>
+      const novoElemento = document.createElement('tag-do-elemento');
+    </code>
+  </pre>
+
+
+
+  <!-- Adicionando elementos ao DOM -->
+
+  <h2>Adicionando elementos ao DOM</h2>
+  <pre>
+    <code>
+      const novoElemento = document.createElement('tag-do-elemento');
+      document.body.appendChild(novoElemento);
+    </code>
+  </pre>
+
+  <!-- Removendo elementos do DOM -->
+ <h2>Removendo elementos do DOM</h2> 
+ <pre>
+   <code>
+     const elemento = document.getElementById('id-do-elemento');
+     document.body.removeChild(elemento);
+   </code> 
+  </pre>
+
+  <!-- Manipulando o conteúdo dos elementos -->
+  <h2>Manipulando o conteúdo e atributos dos elementos HTML</h2>
+  <pre>
+    <code>
+      const elemento = document.getElementById('id-do-elemento');
+      elemento.innerText = 'Novo conteúdo';
+    </code>
+    <code>
+      const elemento = document.getElementById('id-do-elemento');
+      elemento.innerHTML = '<strong>Novo conteúdo</strong>';
+    </code>
+    <code>
+      const elemento = document.getElementById('id-do-elemento');
+      elemento.setAttribute('atributo', 'valor');
+    </code>
+    <code>
+      const elemento = document.getElementById('id-do-elemento');
+      elemento.removeAttribute('atributo');
+    </code>
+  </pre>
+
+  <!-- Manipulando o estilo dos elementos -->
+  <h2>Manipulando o estilo dos elementos</h2>
+  <pre>
+    <code>
+      const elemento = document.getElementById('id-do-elemento');
+      elemento.style.backgroundColor = 'red';
+    </code>
+    <code>
+      const elemento = document.getElementById('id-do-elemento');
+      elemento.style.fontSize = '2rem';
+    </code>
+  </pre>
+
+  <!-- Alterando classes css dos elementos -->
+  <h2>Alterando classes CSS</h2>
+  <pre>
+    <code>
+      const elemento = document.getElementById('id-do-elemento');
+      elemento.classList.add('nova-classe');
+    </code>
+    <code>
+      const elemento = document.getElementById('id-do-elemento');
+      elemento.classList.remove('classe-a-remover');
+    </code>
+    <code>
+      const elemento = document.getElementById('id-do-elemento');
+      elemento.classList.toggle('classe-a-alternar');
+    </code>
+  </pre>
+
+  <!-- Eventos -->
+  <h2>Eventos</h2>
+  <pre>
+    <code>
+      const botao = document.getElementById('id-do-botao');
+      botao.addEventListener('click', function() {
+        alert('Clicou no botão!');
+      });
+    </code>
+  </pre>
+  <pre>
+    <code>
+      const botao = document.getElementById('id-do-botao');
+      botao.addEventListener('click', function() {
+        alert('Clicou no botão!');
+      });
+    </code>
+  </pre>
+
+  <h2>Exemplos</h2>
+  <style>
+    .box {
+      padding: 1rem;
+      margin: 1rem;
+      border: 1px solid #ccc;
+    }
+    .verde {
+      background-color: lightgreen;
+    }
+    .vermelho {
+      background-color: lightcoral;
+    }
+  </style>
+  <div class="box">
+    Caixinha magina
+    <button onclick="addClassVerde(this.parentElement)"> Add Class Verde </button>
+    <button onclick="this.parentElement.classList.remove('verde')"> Remove Class Verde</button>
+    <button onclick="toggleClassVermelha(this.parentElement)"> Toggle Class Vermelha </button>
+  </div>
+</main>
+<script>
+  console.log("Javascript interno no final do arquivo!");
+  function addClassVerde(box) {
+    box.classList.add('verde');
+  }
+  function toggleClassVermelha(box) {
+    box.classList.toggle('vermelho');
+  }
+</script>
+</body>
+</html>

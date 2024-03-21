@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TODO APP</title>
+  <link rel="stylesheet" href="https://unpkg.com/mvp.css"> 
+  <style>
+    .small-button {
+      padding: 0.2rem 0.4rem;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>TODO Exemplo</h1>
+    <label>Tarefa:
+      <input type="text">
+    </label>
+    <button onclick="addTarefa()">Add</button>
+    <ul id="tarefas">
+    </ul>
+    <template id="itemTarefa">
+      <li>
+        <input type="checkbox">
+        <span class="textTarefa"></span>
+        <button class="small-button" onclick="removeTarefa(this.parentElement)">Remover</button>
+      </li>
+    </template>
+  </main>
+  <script>
+    const inputTarefa = document.querySelector('input');
+    const listTarefas = document.getElementById('tarefas');
+    const templateItemTarefa = document.getElementById('itemTarefa');
+
+    function addTarefa() {
+      const textTarefa = inputTarefa.value;
+      const clone = templateItemTarefa.content.cloneNode(true);
+      const span = clone.querySelector('.textTarefa');
+      span.innerText = textTarefa;
+      listTarefas.appendChild(clone);
+      inputTarefa.value = '';
+    }
+
+    function removeTarefa(li) {
+      li.remove();
+    }
+  </script>
+</body>
+</html>

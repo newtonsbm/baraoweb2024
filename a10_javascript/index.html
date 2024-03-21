@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculando Produto</title>
+</head>
+<body>
+  <h1>Calculado Valor de Produto</h1>
+  <script>
+    /**
+     * 1. Criar uma função que recebe o preço unitario de um produto, a quantidade e o taxa de serviço
+     * 2. Calcular o valor total do produto como sendo = (preço unitario * quantidade * ( 1 + taxa de serviço ))
+     * 3. Apresentar o valor para o usuario
+     */
+    function calcularValorTotal(precoUnitario, quantidade, taxaServico) {
+      const valorTotal = precoUnitario * quantidade * (1 + taxaServico);
+      return valorTotal;
+    }
+
+    precoUnitario = prompt("Digite o preço unitário do produto");
+    quantidade = prompt("Digite a quantidade do produto");
+    taxaServico = prompt("Digite a taxa de serviço do produto");
+
+    const valorTotal = calcularValorTotal(precoUnitario, quantidade, taxaServico);
+    alert(`O valor total do produto é R$${valorTotal}`)
+  </script>
+</body>
+</html>
