@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo de Duelo</title>
+</head>
+<body>
+  <button id="ataquePlayer1" onclick="ataque(poke1, poke2)">Ataque P1</button>
+  <button id="ataquePlayer2" onclick="ataque(poke2, poke1)">Ataque P2</button>
+  <h2>Log da Batalha</h2>
+  <div id="console">
+  </div>
+  <script>
+    const consoleBatalha = document.getElementById('console');
+
+    const poke1 = {
+      nome: 'Bulbassauro',
+      vida: 100,
+      ataque: 10,
+      defesa: 5,
+    };
+    const poke2 = {
+      nome: 'Charmander',
+      vida: 100,
+      ataque: 10,
+      defesa: 5,
+    };
+
+    function ataque(pokeAtacante, pokeDefensor) {
+      const miss = Math.random() > 0.5;
+      if (miss) {
+        consoleBatalha.innerHTML += `<p>${pokeAtacante.nome} errou o ataque!</p>`;
+        return;
+      }
+      const dano = pokeAtacante.ataque - pokeDefensor.defesa;
+      pokeDefensor.vida -= dano;
+      consoleBatalha.innerHTML += `<p>${pokeAtacante.nome} atacou ${pokeDefensor.nome} e causou ${dano} de dano!</p>`;
+      consoleBatalha.innerHTML += `<p>${pokeDefensor.nome} agora tem ${pokeDefensor.vida} de vida!</p>`;
+    }
+
+  </script>
+</body>
+</html>

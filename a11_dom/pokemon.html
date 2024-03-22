@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokemon</title>
+  <style>
+    main {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      width: 100px;
+    }
+
+    .bg-blue {
+      background-color: lightblue
+    }
+
+    .bg-yellow {
+      background-color: lightyellow
+    }
+
+
+    img {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="getPokemon()">Go Pokemon!</button>
+  <button onclick="getPokemonAsync()">Go Pokemon Async!</button>
+  <br><br>
+  <main>
+  </main>
+  <template id="pokemonCard">
+      <div class="card">
+        <img src="" alt="">
+        <h2></h2>
+        <p></p>
+      </div>
+    </template>
+  <script>
+    const templatePokemonCard = document.getElementById('pokemonCard');
+    const main = document.querySelector('main');
+
+    function getPokemon(){
+      const randomPokemon = Math.floor(Math.random() * 151) + 1;
+      fetch(`https://pokeapi.co/api/v2/pokemon/${randomPokemon}`)
+        .then(response => response.json())
+        .then(data => {
+          const clone = templatePokemonCard.content.cloneNode(true);
+          const img = clone.querySelector('img');
+          const h2 = clone.querySelector('h2');
+          const p = clone.querySelector('p');
+
+
+          img.src = data.sprites.front_default;
+          h2.innerText = data.name;
+          p.innerText = `Height: ${data.height} | Weight: ${data.weight}`;
+
+          clone.querySelector('.card').classList.add('bg-blue');
+          main.appendChild(clone);
+        });
+    }
+
+    async function getPokemonAsync(){
+      const randomPokemon = Math.floor(Math.random() * 151) + 1;
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomPokemon}`);
+      const data = await response.json();
+      const clone = templatePokemonCard.content.cloneNode(true);
+      const img = clone.querySelector('img');
+      const h2 = clone.querySelector('h2');
+      const p = clone.querySelector('p');
+
+      img.src = data.sprites.front_shiny;
+      // image front all black shad
+
+      h2.innerText = data.name;
+      p.innerText = `Height: ${data.height} | Weight: ${data.weight}`;
+
+      clone.querySelector('.card').classList.add('bg-yellow');
+      main.appendChild(clone);
+    }
+  </script>
+</body>
+</html>
