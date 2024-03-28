@@ -4,28 +4,84 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Jogo de Duelo</title>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    #pokes {
+      display: flex;
+      gap: 1rem;
+    }
+  
+    #pokes div {
+      border: 1px solid #ccc;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      width: 200px;
+    }
+  
+    .lifebar {
+      background-color: lightgreen;
+      border: 1px solid black;
+      display: inline-block;
+      width: 100%;
+      height: 20px;
+    }
+  </style>
 </head>
-<body>
-  <button id="ataquePlayer1" onclick="ataque(poke1, poke2)">Ataque P1</button>
-  <button id="ataquePlayer2" onclick="ataque(poke2, poke1)">Ataque P2</button>
+<body x-data="{poke1: { 
+            nome: 'Bulbassauro', vida: Math.random(30) + 70, ataque: 10, defesa: 5 }, 
+           poke2: { nome: 'Charmander', vida: 100, ataque: 10, defesa: 5} }">
+  <button id="ataquePlayer1" @click="ataque(poke1, poke2)">Ataque P1</button>
+  <button id="ataquePlayer2" @click="ataque(poke2, poke1)">Ataque P2</button>
   <h2>Log da Batalha</h2>
+  <div id="pokes">
+    <div>
+      <h3>Pokemon 1</h3>
+      <p>Nome: 
+        <span x-text="poke1.nome"></span>
+      </p>
+      <p>Vida:
+        <span x-bind:style="{ width: poke1.vida + '%', backgroundColor: poke1.vida > 30 ? 'lightgreen' : 'red'}"
+          class="lifebar">
+        </span>
+      </p>
+      <p>Ataque: 10</p>
+      <p>Defesa: 5</p>
+    </div>
+    <div>
+      <h3>Pokemon 2</h3>
+      <p>Nome:
+        <span x-text="poke2.nome"></span>
+      </p>
+      <p>Vida:
+        <span class="lifebar"
+          x-bind:style="{ width: poke2.vida + '%', backgroundColor: poke2.vida > 30 ? 'lightgreen' : 'red'}">
+        </span>
+      </p>
+      <p>Ataque: 10</p>
+      <p>Defesa: 5</p>
+    </div>
+  </div>
   <div id="console">
   </div>
   <script>
     const consoleBatalha = document.getElementById('console');
 
-    const poke1 = {
-      nome: 'Bulbassauro',
-      vida: 100,
-      ataque: 10,
-      defesa: 5,
-    };
-    const poke2 = {
-      nome: 'Charmander',
-      vida: 100,
-      ataque: 10,
-      defesa: 5,
-    };
+    async function getPoke(poke) {
+      // get random poke1
+      const randomPokemon = Math.floor(Math.random() * 151) + 1;
+      const pokeResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${randomPokemon}`);
+      const pokeData = await pokeResponse.json();
+      console.log(pokeData)
+      poke.nome = pokeData.species.name;
+      poke.vida = pokeData.stats[0].base_stat;
+      poke.ataque = pokeData.stats[1].base_stat;
+      poke.defesa = pokeData.stats[2].base_stat;
+    }
+
+    async function init(poke1, poke2) {
+      poke1 = await getPoke(poke1);
+      poke2 = await getPoke(poke2);
+    }
 
     function ataque(pokeAtacante, pokeDefensor) {
       const miss = Math.random() > 0.5;
@@ -38,6 +94,12 @@
       consoleBatalha.innerHTML += `<p>${pokeAtacante.nome} atacou ${pokeDefensor.nome} e causou ${dano} de dano!</p>`;
       consoleBatalha.innerHTML += `<p>${pokeDefensor.nome} agora tem ${pokeDefensor.vida} de vida!</p>`;
     }
+
+    document.addEventListener('alpine:init', () => {
+      Alpine.data.poke1 = { nome: 'Bulbaddssauro', vida: 100, ataque: 10, defesa: 5 };
+      Alpine.data.poke2 = { nome: 'Charmanddder', vida: 100, ataque: 10, defesa: 5 };
+      init(Alpine.data.poke1, Alpine.data.poke2);
+    });
 
   </script>
 </body>
