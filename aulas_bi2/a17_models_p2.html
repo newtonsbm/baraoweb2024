@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<meta charset="UTF-8" />
+	<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>A17 - Models Intermediário</title>
+</head>
+
+<body>
+	<main id="app" class="reveal">
+
+		<div class="slides">
+			<section>
+				<h1>A17</h1>
+				<h2>Models - Parte 2</h2>
+				<p>
+					<small>
+						<a href="#">Prof. Newton S. B. Miyoshi</a>
+						<br>
+						<a href="mailto:newton.miyoshi@baraodemaua.br">newton.miyoshi@baraodemaua.br</a>
+					</small>
+				</p>
+			</section>
+
+			<section>
+				<img src="/erd.png" alt="">
+			</section>
+
+
+			<section style="font-size: smaller" data-markdown>
+				<textarea data-template>
+						#### Models - Parte 2
+						- Criar models mais complexos
+						- Criar model Cesta e Produto
+						- Criar relacionamento entre os models
+						- Gerar e aplicar migrations
+					</textarea>
+			</section>
+
+			<section>
+				<h4>Model Produto</h4>
+				<pre>/padarias/models.py</pre>
+				<pre>
+						<code class="python" data-trim data-line-numbers>
+
+class Produto(models.Model):
+    nome = models.CharField(
+        verbose_name="Nome", max_length=100, unique=True, null=False, blank=False, help_text="Nome do produto")
+    descricao = models.TextField(
+        verbose_name="Descrição", null=True, blank=True, help_text="Descrição do produto")
+    preco = models.DecimalField(
+        verbose_name="Preço", max_digits=10, decimal_places=2, null=False, blank=False, help_text="Preço do produto")
+    categoria = models.ForeignKey(
+        Categoria, on_delete=models.SET_NULL, verbose_name="Categoria", null=True, help_text="Categoria do produto")
+
+    def __str__(self):
+        return self.nome
+   
+						</code>
+					</pre>
+			</section>
+
+			<section>
+				<h4></h4>
+				<pre></pre>
+				<pre>
+						<code class="shell">
+$ python .\manage.py makemigrations
+Migrations for 'padarias':
+  padarias\migrations\0003_produto.py
+    - Create model Produto
+						</code>
+					</pre>
+			</section>
+
+
+			<section>
+				<h4>Model Cestas</h4>
+				<pre>/padarias/models.py</pre>
+				<pre><code data-trim data-noescape class="python">
+import uuid
+
+class Cesta(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    nome = models.CharField(
+        verbose_name="Nome", max_length=100, unique=True, null=False, blank=False, help_text="Nome da cesta")
+    descricao = models.TextField(
+        verbose_name="Descrição", null=True, blank=True, help_text="Descrição da cesta")
+    preco = models.DecimalField(
+        verbose_name="Preço", max_digits=10, decimal_places=2, null=False, blank=False, help_text="Preço da cesta")
+    produtos = models.ManyToManyField(
+        Produto, verbose_name="Produtos", help_text="Produtos da cesta", related_name="cestas")
+   					
+					</code></pre>
+			</section>
+
+			<section>
+				<h4>Cestas - Nivel</h4>
+				<pre><code data-trim data-noescape class="python">
+
+class Cesta(models.Model):
+
+    class Niveis(models.TextChoices):
+        BASICO = 'B', 'Básico'
+        MEDIO = 'M', 'Médio'
+        PREMIUM = 'P', 'Premium'
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    nome = models.CharField(
+        verbose_name="Nome", max_length=100, unique=True, null=False, blank=False, help_text="Nome da cesta")
+    descricao = models.TextField(
+        verbose_name="Descrição", null=True, blank=True, help_text="Descrição da cesta")
+    preco = models.DecimalField(
+        verbose_name="Preço", max_digits=10, decimal_places=2, null=False, blank=False, help_text="Preço da cesta")
+    produtos = models.ManyToManyField(
+        Produto, verbose_name="Produtos", help_text="Produtos da cesta", related_name="cestas")
+    nivel = models.CharField(
+        verbose_name="Nível", max_length=1, choices=Niveis.choices, default=Niveis.BASICO, help_text="Nível da cesta")
+
+    def __str__(self):
+        return self.nome
+   
+				</code></pre>
+			</section>
+
+			<section>
+				<h4>Make Migration</h4>
+				<pre></pre>
+				<pre>
+						<code class="shell">
+$ python .\manage.py makemigrations
+Migrations for 'padarias':
+  padarias\migrations\0004_cesta.py
+    - Create model Cesta
+						</code>
+					</pre>
+			</section>
+
+			<section>
+				<h4>Migrate Cestas</h4>
+				<pre><code data-trim data-noescape class="shell">
+$ python .\manage.py migrate       
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, padarias, sessions
+Running migrations:
+  Applying padarias.0003_produto... OK
+  Applying padarias.0004_cesta... OK						
+					</code></pre>
+			</section>
+
+
+			<section style="font-size: smaller" data-markdown>
+				<textarea data-template>
+#### A17 - Models Parte 2
+
+Na pasta do projeto cafecompao
+- Replicar os passos vistos em aula para criar os models "Produto" e "Cesta"
+- Gerar a migration com comando `python manage.py makemigrations`
+- Aplicar migration com comando `python manage.py migrate`
+- **Criar model Endereço**
+- Alterar model Padaria para incluir relacionamento com "Cesta"
+- Gerar a migration e aplicar
+- Subir para github com o nome "a17 models parte 2"
+					</textarea>
+			</section>
+
+
+			<section>
+				<hr>
+				<h4>Fim</h4>
+				<hr>
+			</section>
+
+		</div>
+
+	</main>
+	<script type="module" src="/main.js"></script>
+</body>
+
+</html>

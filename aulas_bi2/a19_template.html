@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<meta charset="UTF-8" />
+	<link rel="icon" type="image/svg+xml" href="/vite.svg" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>A19 - Template</title>
+</head>
+
+<body>
+	<main id="app" class="reveal">
+
+		<div class="slides">
+			<section>
+				<h1>A19</h1>
+				<h2>Introdução à Views e Templates</h2>
+				<p>
+					<small>
+						<a href="#">Prof. Newton S. B. Miyoshi</a>
+						<br>
+						<a href="mailto:newton.miyoshi@baraodemaua.br">newton.miyoshi@baraodemaua.br</a>
+					</small>
+				</p>
+			</section>
+
+			<section>
+				<img src="/erd.png" alt="">
+			</section>
+
+			<section style='font-size: smaller' data-markdown>
+				<textarea data-template>
+					#### O que vamos fazer?
+					- Criar views
+					- Criar templates
+					- Configurar URLs
+					- Vamos utilizar bootstrap para alguns componentes!
+				</textarea>
+			</section>
+
+			<section style='font-size: smaller' data-markdown>
+				<textarea data-template>
+					#### URLs que vamos criar 
+					- /padarias/ - Home
+					- /padarias/sobre - Sobre o projeto 
+					- /padarias/unidades/ - Lista de padarias
+					- /padarias/unidades/:id - Detalhes da padaria
+					- /padarias/cestas - Lista de cestas
+					- /padarias/cestas/:id - Detalhes da cesta
+				</textarea>
+			</section>
+
+			<section style='font-size: smaller' data-markdown>
+				<textarea data-template>
+					## Templates
+					Criação de templates base para reutilização de código
+				</textarea>
+			</section>
+
+			<section style='font-size: smaller' data-markdown>
+				<textarea data-template>
+					#### Criando o template base
+					- Dentro da pasta templates
+						- Criar arquivo base.html
+						- Criar o diretório components
+						- Criar o arquivo header.html
+					- Criar pasta static no diretorio do app (padarias)
+						- Dentro criar pasta css
+							- Dentro criar arquivo style.css
+				</textarea>
+			</section>
+
+			<section>
+				<h4>Template Base</h4>
+				<pre>/padarias/templates/base.html</pre>
+				<pre><code data-trim class="html"><script type="text/template">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Café com Pão{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  
+</head>
+<body>
+  {% include 'components/header.html' %} 
+  <div class="container">
+    {% block conteudo %}{% endblock %}
+  </div>
+</body>
+</html>				
+				</script></code></pre>
+			</section>
+
+			<section>
+				<h4>Criando o Header</h4>
+				<pre>/padarias/templates/components/header.html</pre>
+				<pre><code data-trim data-noescape class="html"><script type="text/template">
+<header class="site-header sticky-top py-2 bg-body-tertiary">
+  <nav class="container d-flex flex-column flex-md-row justify-content-between">
+    <span class="py-0" id="logo" href="#" >
+      <i class="bi bi-cup-hot"></i> Café com Pão
+    </span>
+    <a class="py-2 d-none d-md-inline-block" href="{% url 'index' %}">Principal</a>
+    <a class="py-2 d-none d-md-inline-block" href="#">Padarias</a>
+    <a class="py-2 d-none d-md-inline-block" href="#">Cestas</a>
+    <a class="py-2 d-none d-md-inline-block" href="{% url 'sobre' %}">Sobre</a>
+  </nav>
+</header>					
+				</script></code></pre>
+			</section>
+
+			<section>
+				<h4>Alterando index.html</h4>
+				<pre>/padarias/templates/index.html</pre>
+				<pre><code data-trim data-noescape class="html"><script type="text/template">
+{% extends 'base.html' %}
+
+{% block title %}Café com Pão - Home{% endblock %}
+
+{% block conteudo %}
+  <h1>Principal</h1>
+  <p>Seja bem-vindo ao Café com Pão!</p>
+{% endblock %}					
+				</script></code></pre>
+			</section>
+
+			<section>
+				<h4>Criando style.css</h4>
+				<pre>/padarias/static/css/style.css</pre>
+				<pre><code data-trim data-noescape class="css">
+#logo {
+  font-size: x-large;
+}
+
+body > header {
+  border-bottom: 1px solid darkgray;
+}
+				</code></pre>
+			</section>
+
+			<section style='font-size: smaller' data-markdown>
+				<textarea data-template>
+#### Tarefa A19 - Template
+- No repositório de atividades no github
+- Realizar as etapas vista em aula
+    - Criar template base e o header
+    - Alterar index
+    - Adicionar style.css
+- Alterar o template sobre
+- Criar um novo componente para o footer e alterar o base.html para inclui-lo
+
+
+				</textarea>
+			</section>
+
+			<section>
+				<h4>Alterando sobre.html</h4>
+				<pre>/padarias/templates/sobre.html</pre>
+				<pre><code data-trim data-noescape class="html"><script type="text/template">
+{% extends 'base.html' %}
+
+{% block title %}Café com Pão - Sobre{% endblock %}
+
+{% block conteudo %}
+  <h1>Sobre</h1>
+  <p>Este é um site de padarias.</p>
+  <p>Página em construção</p>
+{% endblock %}				
+				</script></code></pre>
+			</section>
+
+<section>
+	<h4>Home - Incluir dados de unidades</h4>
+	<pre>/padarias/templates/index.html</pre>
+	<pre><code data-trim data-noescape class="html"><script type="text/template">
+{% extends 'base.html' %}
+
+{% block title %}Café com Pão - Home{% endblock %}
+
+{% block conteudo %}
+  <h1>Principal</h1>
+  <p>Seja bem-vindo ao Café com Pão!</p>
+  <p>Atualmente contatmos com <strong>5 unidades</strong> em toda nossa rede</p>
+  <p>Temos também <strong>3 opções de cestas de café da manhã</strong> à sua escolha</p>
+{% endblock %}		
+	</script></code></pre>
+</section>
+
+<section>
+	<h4>Alterando index view</h4>
+	<pre>/padarias/views.py</pre>
+	<pre><code data-trim data-noescape class="python">
+# file padarias/views.py
+
+from django.shortcuts import render
+from django.http import HttpResponse
+
+from .models import Padaria, Cesta
+
+def index(request):
+    count_padarias = Padaria.objects.count()
+    count_cestas = Cesta.objects.count()
+    context = {
+        'count_padarias': count_padarias,
+        'count_cestas': count_cestas,
+    }
+    return render(request, 'index.html', context=context)
+
+def sobre(request):
+    return render(request, 'sobre.html')	
+	</code></pre>
+</section>
+
+<section>
+	<h4>Alterar index para incluir contexto</h4>
+	<pre>/padarias/templates/index.html</pre>
+	<pre><code data-trim data-noescape class="html"><script type="text/template">
+{% extends 'base.html' %}
+
+{% block title %}Café com Pão - Home{% endblock %}
+
+{% block conteudo %}
+  <h1>Principal</h1>
+  <p>Seja bem-vindo ao Café com Pão!</p>
+  <p>Atualmente contatmos com <strong>{{ count_padarias }} unidades</strong> em toda nossa rede</p>
+  <p>Temos também <strong>{{ count_cestas }} opções de cestas de café da manhã</strong> à sua escolha</p>
+{% endblock %}		
+	</script></code></pre>
+</section>
+
+			<section style='font-size: smaller' data-markdown>
+				<textarea data-template>
+#### Tarefa A19 - Parte 2 - Contexto
+- No repositório de atividades no github
+- Alterar o index para incluir contexto conforme visto em aula
+- Incluir também quantidade de produtos no index.html
+	- Alterar view index incluindo quantidade de produto no contexto
+	- Alterar template 
+- Subir alterações no github
+				</textarea>
+			</section>
+			<section>
+				<hr>
+				<h4>Fim</h4>
+				<hr>
+			</section>
+
+		</div>
+
+	</main>
+	<script type="module" src="/main.js"></script>
+</body>
+
+</html>

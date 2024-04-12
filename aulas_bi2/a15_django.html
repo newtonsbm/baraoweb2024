@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A15 - Django</title>
+  </head>
+  <body>
+		<main id="app" class="reveal">
+
+			<div class="slides">
+				<section>
+					<h1>A15</h1>
+					<h2>Iniciando Projeto em Django</h2>
+					<p>
+						<small>
+							<a href="#">Prof. Newton S. B. Miyoshi</a>
+							<br>
+							<a href="mailto:newton.miyoshi@baraodemaua.br">newton.miyoshi@baraodemaua.br</a> 
+						</small>
+					</p>
+				</section>
+
+				<section  style="font-size: smaller" data-markdown>
+					<textarea data-template>
+						###  Projeto a ser realizado 
+						- Café com Pão - Rede de padarias com serviço de entrega de cestas de café da manhã
+						- CRUD - Create Retrieve Update Delete
+						- Gerenciar padarias e produtos inicialmente
+						- Assinaturas e pedidos futuramente
+						- Autenticação
+					</textarea>
+				</section>
+
+				<section>
+					<h4>Iniciando uma aplicação django dentro do projeto</h4>
+					<pre>
+						<code class="hljs">
+						$ cd .\cafecompao\
+						$ \cafecompao> python manage.py startapp padarias
+						</code>
+					</pre>
+				</section>
+
+				<section>
+					<h4>Criando primeira view</h4>
+					<pre>
+						<code class="hljs language-python" data-trim data-line-numbers>
+							# file padarias/views.py
+
+							from django.shortcuts import render
+							from django.http import HttpResponse
+
+							def index(request):
+									return HttpResponse("Bem vindo a rede de padarias Cafe com Pao")
+						</code>
+					</pre>
+				</section>
+
+				<section>
+					<h4>Mapeando URLs</h4>
+					<p>Criar arquivo urls.py no app 'padarias'</p>
+					<pre>
+						<code class="hljs language-python" data-trim data-line-numbers>
+							# file padarias/urls.py
+							from django.urls import path
+
+							from . import views
+
+							urlpatterns = [
+									path('', views.index, name='index'),
+							]
+						</code>
+					</pre>
+				</section>
+
+				<section>
+					<h4>Redirecionando URLs</h4>
+					<p class="smaller">Alterar o arquivo global urls.py em `cafecompao/urls.py`</p>
+					<pre>
+						<code class="hljs language-python" data-trim data-line-numbers>
+							# file cafecompao/urls.py
+							from django.contrib import admin
+							from django.urls import path, include
+
+							urlpatterns = [
+									path('admin/', admin.site.urls),
+									path('', include('padarias.urls')),
+							]
+						</code>
+					</pre>
+				</section>
+
+				<section>
+					<h4>Testando a aplicação</h4>
+					<p class="smaller">Executar o servidor de desenvolvimento</p>
+					<pre>
+						<code class="hljs language-ps" data-trim >
+$ py .\manage.py runserver
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+
+You have 18 unapplied migration(s). Your project may not work properly until you apply the migrations for app(s): admin, auth, contenttypes, sessions.
+Run 'python manage.py migrate' to apply them.
+Django version 4.1.5, using settings 'cafecompao.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+						</code>
+					</pre>
+				</section>
+
+				<section>
+					<h4>Testando a aplicação</h4>
+					<p>Acessar <a href="http://localhost:8000/">http://localhost:8000/</a></p>
+					<p>Realizar tarefa disponível no GitHub</p>
+				</section>
+
+				<section>
+					<h4>Criar template HTML</h4>
+					<p>Criar diretorio e arquivo <pre>/padarias/templates/index.html</pre></p>
+					<pre><code class="hljs language-html" data-trim data-line-numbers><script type="text/template">
+						<!DOCTYPE html>
+						<html lang="en">
+						<head>
+							<meta charset="UTF-8">
+							<meta http-equiv="X-UA-Compatible" content="IE=edge">
+							<meta name="viewport" content="width=device-width, initial-scale=1.0">
+							<title>Bem vindo Café com Pão</title>
+						</head>
+						<body>
+							<h1>Bem vindo ao Café com Pão</h1>
+						</body>
+						</html>
+					</script></code></pre>
+				</section>
+
+				<section>
+					<h4>Linkando view e template</h4>
+					<pre>/padarias/views.py</pre>
+					<pre><code class="hljs language-python" data-trim data-line-numbers="">
+						from django.shortcuts import render
+						from django.http import HttpResponse
+
+						def index(request):
+								return render(request, 'index.html')
+					</code></pre>
+				</section>
+
+				<section>
+					<h4>Registrando a aplicação "padarias"</h4>
+					<pre>/cafecompao/settings.py</pre>
+					<pre><code class="hljs language-python" data-trim data-line-numbers="">
+
+						# Application definition
+
+						INSTALLED_APPS = [
+								'django.contrib.admin',
+								'django.contrib.auth',
+								'django.contrib.contenttypes',
+								'django.contrib.sessions',
+								'django.contrib.messages',
+								'django.contrib.staticfiles',
+								'padarias.apps.PadariasConfig',
+						]
+					</code></pre>
+				</section>
+				<section>
+					<h4>A15 - P1 - Criar Aplicação</h4>
+						<small>
+						Criar o projeto e subir a pasta ‘cafecompao’
+						<br>
+						<ul>
+						<li>A atividade a15 consiste em realizar os passos de criação da aplicação ‘padarias’ vistas na aula</li>
+						<li><code>python manage.py startapp padarias</code></li>
+						<li>Criar uma nova view 'sobre' na aplicação padarias que retorna a string 'Página em construção' e realizar a configuração da rota para a url /catalogo/sobre </li>
+						<li><code>python manage.py run_server</code></li>
+						<li>Testar a aplicação ver se esta tudo OK acessando ‘localhost:8000/padarias  e localhost:8000/padarias/sobre</li>
+						<li>Subir no github com a mensagem do commit contendo a palavra ‘a15’ </li>
+						</ul>
+						</small>
+				</section>
+				<section>
+					<h4>A15 - P2 - Pagina Sobre</h4>
+					<ul>
+						<li>Realizar os passos para mostrar o template 'index.html'</li> 
+						<li>Pode-se copiar os templates desenvolvidos no primeiro bimestre</li> 
+						<li>Criar template para 'sobre.html'</li> 
+					</ul>
+				</section>
+
+				<section>
+					<hr>
+					<h4>Fim</h4>
+					<hr>
+				</section>
+
+			</div>
+
+		</main>
+    <script type="module" src="/main.js"></script>
+  </body>
+</html>
