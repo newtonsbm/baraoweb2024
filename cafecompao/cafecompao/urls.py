@@ -18,18 +18,11 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path
-from padarias.views import home, about, contact
+from padarias import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home),
-    path('sobre/', about),
-    path('contato/', contact),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-
-
-
-
-
+    path('', views.home),
+] 
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
