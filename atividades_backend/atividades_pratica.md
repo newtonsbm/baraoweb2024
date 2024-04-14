@@ -98,8 +98,8 @@ TEMPLATES = [
 - Rodar o servidor de desenvolvimento `py manage.py runserver` e acessar a página `http://localhost:8000/` no navegador e verificar se a página `home.html` é exibida corretamente
 
 ### Arquivos Estáticos
-- Criar pasta `static` na raiz do projeto com subpastas `css`, `js` e `img`
-- Copiar arquivos de estilo, scripts e imagens do protótipo do Café com Pão que estão na pasta `prototipo` no repositorio do professor para as pastas `static/css`, `static/js` e `static/img` respectivamente
+- Criar pasta `static` na raiz do projeto com subpastas `css`, `js` e `images`
+- Copiar arquivos de estilo, scripts e imagens do protótipo do Café com Pão que estão na pasta `prototipo` no repositorio do professor para as pastas `static/css`, `static/js` e `static/images` respectivamente
 - Adicionar configuração de arquivos estáticos e de media em `cafecompao/settings.py`
 
 ```python
