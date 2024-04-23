@@ -161,15 +161,9 @@ Outros conceitos que vamos ver é o de migrations e fixtures. Migrations são ar
 - Criar modelo de dados para `Categoria` em `padarias/models.py`
 
 ```python
-class Padaria(models.Model):
+class Categoria(models.Model):
     nome = models.CharField(
-        verbose_name="Nome", max_length=100, unique=True, null=False, blank=False, help_text="Nome da padaria")
-    descricao = models.TextField(
-        verbose_name="Descrição", null=True, blank=True, help_text="Descrição da padaria")
-    cestas = models.ManyToManyField(
-        'Cesta', verbose_name="Cestas", help_text="Cestas da padaria", related_name="padarias")
-    imagem = models.ImageField(
-        verbose_name="Imagem", upload_to="padarias", null=True, blank=True, help_text="Imagem da padaria")
+        verbose_name="Nome", max_length=100, unique=True, null=False, blank=False, help_text="Nome da categoria")
 
     def __str__(self):
         return self.nome
@@ -177,7 +171,7 @@ class Padaria(models.Model):
 
 ### Criar Migration
 
-- Criar migration automaticamente para o modelo de dados `Padaria` com o comando `py manage.py makemigrations`
+- Criar migration automaticamente para o modelo de dados `Categoria` com o comando `py manage.py makemigrations`
 - Verificar que o arquivo de migration foi criado em `padarias/migrations`
 
 ```python
