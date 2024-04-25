@@ -19,3 +19,14 @@ python manage.py runserver
 - Iniciar um app django chamado padarias
 python manage.py startapp padarias
 
+# ORM
+- Criar migrations
+python manage.py makemigrations 
+
+- Aplicar migration
+python manage.py migrate
+
+# Auth
+
+- Criar super usuário
+python manage.py createsuperuser

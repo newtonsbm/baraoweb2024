@@ -2,6 +2,14 @@
 
 Prof. Newton Miyoshi - newton.miyoshi@baraodemaua.br
 
+## TLDR
+
+1. [Atividade 1 - Iniciando Projeto Django](#atividade-1---iniciando-projeto-django): Criar um projeto Django chamado `cafecompao` e uma aplicação chamada `padarias`
+2. [Atividade 2 - Rotas e Arquivos Estáticos](#atividade-2---rotas-e-arquivos-estáticos): Criar view e rota para a página inicial e configurar arquivos estáticos (CSS, JS, Imagens)
+3. [Atividade 3 - Bancos de Dados e ORM](#atividade-3---bancos-de-dados-e-orm--parte-1): Criar modelo de dados para `Categoria`, criar o migration, carregar as fixtures de categoria e verificar se as categorias foram carregadas corretamente com sqlite browser
+4. [Atividade 4 - Bancos de Dados e ORM - Parte 2](#atividade-4---bancos-de-dados-e-orm---parte-2): Incluir dependência para lidar com imagens no Django ( lib 'Pillow' ), criar modelo de dados para `Cesta` e `Produto` e os relacionamentos entre eles, criar e aplicar migrations, criar e aplicar fixtures.
+5. [Atividade 5 - Administração de Dados](#atividade-5---administração-de-dados): Registrar os modelos de dados no admin do Django, criar super usuário para acessar o admin, verificar se os dados estão sendo exibidos corretamente no admin e cadastrar novos dados
+
 ## Atividade 1 - Iniciando Projeto Django
 
 1. Criar um projeto Django chamado `cafecompao`
@@ -390,5 +398,52 @@ Installed 3 object(s) from 1 fixture(s)
 - Enviar para o github com mensagem de commit 'Atividade 4 - Banco de dados e ORM parte 2'
 
 
+## Atividade 5 - Administração de Dados
 
+1. Registrar os modelos de dados no admin do Django
+2. Criar super usuário para acessar o admin
+3. Verificar se os dados estão sendo exibidos corretamente no admin e cadastrar novos dados
+
+### Resumo dos Conceitos Importantes
+
+Nesta atividade vamos trabalhar com a criação de um ambiente para administração de dados, também conhecido como ferramenta de backoffice ou CMS (Content Management System). Esse tipo de ferramenta é geralmente utilizada por administradores de sistemas para gerenciar os dados da aplicação e por usuários internos e equipes responsáveis pelo gerenciamento do negócio. Diversos frameworks possuem ferramentas de administração de dados que permitem a criação, leitura, atualização e deleção de dados diretamente no banco de dados. O Django possui um sistema de autenticação pré-definido assim como um sistema de administração próprio que pode ser facilmente customizado. O painel de administração é uma ferramenta poderosa que permite a administração de dados sem a necessidade de escrever código adicional. O painel de administração é uma ferramenta útil para administradores de sistemas e para a manutenção de dados. [Ver mais sobre administração de dados em Django.](https://docs.djangoproject.com/en/5.0/ref/contrib/admin/)
+Neste link é possível ver uma série de temas alternativos, libs utilitárias, tutoriais e videos sobre o admin do Django: [https://github.com/originalankur/awesome-django-admin](https://github.com/originalankur/awesome-django-admin)
+
+### Registrar Modelos no Admin
+
+- Registrar os Models criados no admin do Django alterando o arquivo já existente `padarias/admin.py`
+
+```python
+
+from django.contrib import admin
+from .models import Categoria, Produto, Cesta, Padaria
+
+admin.site.register(Categoria)
+admin.site.register(Produto)
+admin.site.register(Cesta)
+admin.site.register(Padaria)
+```
+
+### Criar Super Usuário
+
+- Criar um super usuário para acessar o admin com o comando `py manage.py createsuperuser`
+
+```bash
+❯ python manage.py createsuperuser
+Username (leave blank to use 'newton'): admin
+Email address: admin@admin.com
+Password: admin123
+Password (again): admin123
+Superuser created successfully.
+```
+
+### Acessar o Admin e Verificar Dados
+
+- Rodar o servidor de desenvolvimento `py manage.py runserver` e acessar o admin `http://localhost:8000/admin`
+- Fazer login com o super usuário criado no passo anterior
+
+### Atividade na Aula
+
+- Reproduzir os passos acima 
+- Subir para o github com mensagem de commit 'Atividade 5 - Administração de Dados'
 
