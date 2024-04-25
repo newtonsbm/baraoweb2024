@@ -303,6 +303,8 @@ Os bancos de dados relacionais possuem diversos tipos de dados que representam o
 - No arquivo `models.py`
 
 ```python
+import uuid # colocar essa linha no inicio do arquivo
+
 class Produto(models.Model):
     nome = models.CharField(
         verbose_name="Nome", max_length=100, unique=True, null=False, blank=False, help_text="Nome do produto")
@@ -342,7 +344,7 @@ class Cesta(models.Model):
         return self.nome
 ```
 
-#### Obsevações 
+#### Observações 
 
 - Verifique que os relacionamentos foram criados com os campos ManyToManyField referenciando a tabela de produtos e ForeignKey referenciando a tabela de categorias.
 - No caso de Cesta, gostariamos de criar os Níveis de cestas. Esse tipo de padrão é comum, sempre que queremos definir tipos de dados que são fixos e não devem ser alterados. Em diversos frameworks esse tipo de padrão é chamado de `Enum`. 
@@ -355,12 +357,32 @@ class Cesta(models.Model):
 - Verificar que novos arquivos de migration foram criados em `padarias/migrations`
 - Aplicar a migration com o comando `py manage.py migrate`
 
+```bash
+❯ python manage.py makemigrations
+Migrations for 'padarias':
+  padarias/migrations/0002_produto_cesta.py
+    - Create model Produto
+    - Create model Cesta
+
+❯ python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, padarias, sessions
+Running migrations:
+  Applying padarias.0002_produto_cesta... OK
+```
+
 ### Criar e Carregar Fixtures
-- Criar arquivo `produtos.json` e `cestas.json` na pasta `padarias/fixtures` com os dados de produtos e cestas
-- Esses arquivos estão no repositório na pasta `prototipo/fixtures`
-- Verifique que nos arquivos de fixtures os produtos e cestas estão relacionados com as categorias que foram criadas anteriormente e entre si também. Dessa forma é possível pré-definir esses relacionamentos por meio das fixtures.
+- Copiar os arquivos `produtos.json` e `cestas.json` da pasta `prototipo/fixtures` para a pasta `padarias/fixtures` que contem os dados iniciais de produtos e cestas
+- Veja que nos arquivos de fixtures os produtos e cestas estão relacionados com as categorias que foram criadas anteriormente e entre si também. Dessa forma é possível pré-definir esses relacionamentos por meio das fixtures.
 - Carregar as fixtures com o comando `py manage.py loaddata produtos` e `py manage.py loaddata cestas` nesta ordem
 - Verificar se os produtos e cestas foram carregadas corretamente com o sqlite browser ou via extensao do VS Code
+
+```bash
+❯ python manage.py loaddata produtos
+Installed 24 object(s) from 1 fixture(s)
+❯ python manage.py loaddata cestas
+Installed 3 object(s) from 1 fixture(s)
+```
 
 ### Atividade na Aula
 - Reproduzir os passos acima
