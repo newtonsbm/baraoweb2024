@@ -2,6 +2,7 @@
 
 Prof. Newton Miyoshi - newton.miyoshi@baraodemaua.br
 
+
 ## TLDR
 
 1. [Atividade 1 - Iniciando Projeto Django](#atividade-1---iniciando-projeto-django): Criar um projeto Django chamado `cafecompao` e uma aplicação chamada `padarias`
@@ -89,7 +90,9 @@ urlpatterns = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': BASE_DIR / 'templates',
+        'DIRS': [
+            BASE_DIR / 'templates',
+        ]
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
