@@ -83,7 +83,7 @@ urlpatterns = [
 ```
 
 - Criar pasta `templates` na raiz do projeto com uma subpasta `padarias` e outra `components`
-- Criar arquivo `home.html` em `templates/padarias` com uma página simples html para teste
+- Criar arquivo `home.html` em `templates/` com uma página simples html para teste
 - Adicionar configuração de templates em `cafecompao/settings.py`
 
 ```python
