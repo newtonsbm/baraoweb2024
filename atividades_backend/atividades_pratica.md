@@ -454,5 +454,6 @@ Superuser created successfully.
 ### Atividade na Aula
 
 - Reproduzir os passos acima 
+- Navegar no admin, cadastrar novos dados
 - Subir para o github com mensagem de commit 'Atividade 5 - Administração de Dados'
 
