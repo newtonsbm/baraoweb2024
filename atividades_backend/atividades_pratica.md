@@ -142,6 +142,9 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 ```
 
 - Copiar o conteudo do arquivo do protótipo 'prototipo/index.html' para o arquivo 'templates/home.html' e rodar o servidor de desenvolvimento `py manage.py runserver` e acessar a página `http://localhost:8000/` no navegador e verificar se a página `home.html` é exibida corretamente com os estilos e imagens do protótipo
+- Ao final dessa atividade teremos a seguinte estrutura de pastas:
+
+![Estrutura de Pastas](folder1.png)
 
 
 ## Atividade 3 - Bancos de Dados e ORM 
@@ -288,6 +291,9 @@ Running migrations:
 - Instalar o sqlite browser: https://sqlitebrowser.org/dl/
 - Abrir o arquivo `db.sqlite3` que esta na raiz do projeto com o sqlite browser e verificar se as categorias foram carregadas corretamente
 - Existe uma extensão no VS Code chamada `SQLite` que também pode ser utilizada para visualizar o banco de dados
+- Ao final dessa atividade teremos a seguinte estrutura de pastas:
+
+![Estrutura de Pastas](folder2.png)
 
 ### Atividade em Aula
 - Reproduzir os passos acima
