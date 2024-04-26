@@ -27,7 +27,7 @@ Por fim, outro conceito importante é da modularização e reuso de código. Tod
 
 - Instalar Python: https://www.python.org/downloads/
 - Instalar Django: `pip install django` ou `py -m pip install django`
-- Criar projeto Django: `django-admin startproject cafecompao` ou `py -m django-admin startproject cafecompao`
+- Criar projeto Django: `django-admin startproject cafecompao` ou `py -m django startproject cafecompao`
 
 ### Aplicação Django
 - Entrar na pasta criada do projeto: `cd cafecompao`
@@ -82,7 +82,7 @@ urlpatterns = [
 ]
 ```
 
-- Criar pasta `templates` na raiz do projeto com uma subpasta `padarias` e outra `components`
+- Criar pasta `templates` na raiz do projeto, ou seja, a pasta onde está o arquivo `manage.py`, com uma subpasta `padarias` e outra `components`
 - Criar arquivo `home.html` em `templates/` com uma página simples html para teste
 - Adicionar configuração de templates em `cafecompao/settings.py`
 
