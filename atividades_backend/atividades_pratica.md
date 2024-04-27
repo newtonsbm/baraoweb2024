@@ -17,6 +17,7 @@ Prof. Newton Miyoshi - newton.miyoshi@baraodemaua.br
 2. Criar aplicação chamada `padarias`
 
 ### Resumo dos Conceitos Importantes
+
 Nesta atividade vamos criar de uma aplicação web fullstack. Diversos frameworks fullstack utilizam o padrão [MVC (Model-View-Controller)](https://developer.mozilla.org/en-US/docs/Glossary/MVC) que no caso particular do django utiliza uma variação desse modelo chamado [MVT (Model-View-Template)](https://developer.mozilla.org/en-US/docs/Learn/Server-side/Django/Introduction). 
 
 Todo framework de desenvolvimento web terá uma estrutura de pastas e arquivos que são necessários para o funcionamento do projeto. No caso do Django, temos a pasta do projeto principal que contém as configurações gerais (settings.py). Além disso todo framework também terá ferramentas de linha de comando (cli tools) que facilitam a criação de novos componentes do projeto além de outros utilitários. No caso do django essas ferramentas são o django-admin e o manage.py.
@@ -30,6 +31,7 @@ Por fim, outro conceito importante é da modularização e reuso de código. Tod
 - Criar projeto Django: `django-admin startproject cafecompao` ou `py -m django startproject cafecompao`
 
 ### Aplicação Django
+
 - Entrar na pasta criada do projeto: `cd cafecompao`
 - Criar aplicação Django: 
 `python manage.py startapp padarias` ou `py manage.py startapp padarias`
@@ -456,4 +458,159 @@ Superuser created successfully.
 - Reproduzir os passos acima 
 - Navegar no admin, cadastrar novos dados
 - Subir para o github com mensagem de commit 'Atividade 5 - Administração de Dados'
+
+## Atividade 6 - Composição de Templates e Componentes
+
+1. Criar template principal e componentes para cabeçalho e rodapé
+2. Compor a página inicial com os componentes criados e a partir do template princnipal
+
+### Resumo dos Conceitos Importantes
+
+Existem diferentes libs e frameworks que permitem a composição de templates e componentes. Essas libs permitem que os desenvolvedores criem templates reutilizáveis e componentes que podem ser utilizados em diferentes partes da aplicação. Um componente é um bloco de código que pode ser reutilizado em diferentes partes da aplicação. Um componente pode ser um cabeçalho, um rodapé, um menu, um formulário, etc. A composição de templates e componentes é uma técnica poderosa que permite a reutilização de código e a criação de interfaces consistentes. Geralmente, existem 2 formas de reaproveitamento de código a nível de templates html: herança e composição (inclusão). Veja aqui sobre [tipos de sistema de templates](https://en.wikipedia.org/wiki/Web_template_system)
+No Django, a composição de templates é feita através de tags e filtros que permitem a inclusão de componentes dentro de outros templates. Além disso, o Django possui um sistema de herança de templates que permite a criação de templates base e a extensão desses templates em outros templates. [Ver mais sobre templates em Django.](https://docs.djangoproject.com/en/5.0/topics/templates/)
+
+### Criar Componentes de Cabeçalho e Rodapé
+
+- Criar os arquivos `header.html` e `footer.html` na pasta `templates/components` 
+- A partir do arquivo `home.html`, extrair a parte do cabeçalho (menu superior) e do rodapé (footer) para componentes que foram criados na pasta `templates/components`
+
+arquivo `header.html`
+```html
+<header>
+  <nav>
+    <span class="logo">
+      Café com Pão
+      <i class="bi bi-cup-hot"></i>
+    </span>
+    <ul>
+      <li><a href="{% url 'principal' %}">Principal</a></li>
+      <li><a href="{% url 'padarias_list' %}">Padarias</a></li>
+      <li><a href="{% url 'cestas_list' %}">Cestas</a></li>
+      <li><a href="{% url 'sobre' %}">Sobre</a></li>
+    </ul>
+    {% if user.is_authenticated %}
+      <a href="{% url 'minha_conta' %}" class="btn btn-primary"><i class="bi bi-house"></i> Minha Conta</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn btn-primary">Entrar</a>
+    {% endif %}
+  </nav>
+</header>
+```
+
+arquivo `footer.html`
+```html
+{% load static %}
+<footer>
+  <span class="logo">
+    <i class="bi bi-cup-hot-fill"></i>
+    CAFÉ COM PÃO
+  </span>
+  <hr>
+  <div id="social">
+    <a href="https://www.facebook.com/" target="_blank">
+      <img src="{% static 'images/logos/face.png' %}" alt="facebook link" />
+    </a>
+    <a href="https://www.instagram.com/" target="_blank">
+      <img src="{% static 'images/logos/instagram.png' %}" alt="instagram link" />
+    </a>
+    <a href="https://www.pinterest.com/" target="_blank">
+      <img src="{% static 'images/logos/pinterest.png' %}" alt="pinterest link" />
+    </a>
+  </div>
+</footer>
+```
+
+- A tag `{% load static %}` é utilizada para carregar os arquivos estáticos como imagens, css e js dinamicamente
+- No desenvolvimento local, os arquivos estáticos são servidos pelo servidor de desenvolvimento. Em produção, os arquivos estáticos são servidos por um servidor de arquivos estáticos como o `whitenoise`, um bucket (S3 ou GCP) ou uma CDN (Content Delivery Network). Neste caso a tag `static` irá gerar a URL correta para o arquivo estático dependendo do ambiente de execução.
+
+### Criar Template Base Principal
+
+- Criar o arquivo `base.html` na pasta `templates` com o seguinte conteúdo
+
+```html
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Café com Pão</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  {% block css %}{% endblock %}
+</head>
+<body>
+  {% include 'components/header.html' %}
+  <main>
+    {% block conteudo %}{% endblock %}
+  </main>
+  {% include 'components/footer.html' %}
+
+  {% block javascript %}{% endblock %}
+</body>
+</html>
+```
+
+- No arquivo `base.html` estamos incluindo os 2 componentes criados anteriormente e definindo o bloco de conteúdo `{% block conteudo %}` para que os templates filhos (aqueles que herdam deste template base) possam sobrescrever o conteúdo desses blocos
+- O bloco `{% block css %}` e `{% block javascript %}` são utilizados para que os templates filhos possam adicionar css e javascript específicos deles. Esses blocos são opcionais.
+
+### Compor a Página Inicial
+
+- Alterar o arquivo `home.html` para herdar do template base `base.html` e sobrescrever o bloco de conteúdo
+
+```html
+{% extends 'base.html' %}
+
+{% block conteudo %}  
+
+<div id="hero" style="background-image: url(/static/images/cafepaoHero.png)">
+  <hgroup>
+    <h1>Assine sua manhã perfeita!</h1>
+    <p>
+      Comece suas manhãs com sabor e praticidade Assine o Café com Pão!
+    </p>
+  </hgroup>
+</div>
+
+<section class="featured container">
+  <img src="/static/images/breadsHome.png" alt="cesta com paes">
+  <div>
+    <h2>Cestas com produtos perfeitos!</h2>
+    <p>
+      Nosso compromisso com a qualidade e a conveniência torna cada entrega uma experiência única. Experimente o que temos a oferecer
+    </p>
+    <ul>
+      <li>Variedade Premium</li>
+      <li>Personalização Flexível</li>
+      <li>Entrega Confiável</li>
+    </ul>
+  </div>
+</section>
+
+<section class="quote">
+  <q class="container">
+    Adoro receber minha cesta de café da manhã do Café com Pão toda semana! A variedade de itens frescos e a qualidade dos produtos superam minhas expectativas. Começo cada manhã com um sorriso graças a essa delícia. Recomendo a todos que buscam praticidade e sabor na primeira refeição do dia!
+    <br>
+    <cite>— Maria da Silva, São Paulo</cite>
+  </q>
+</section>
+
+{% endblock %}
+```
+
+- No arquivo `home.html` estamos sobrescrevendo o bloco de conteúdo `{% block conteudo %}` com o conteúdo específico da página inicial
+- O comando `{% extends 'base.html' %}` é utilizado para herdar do template base `base.html`
+- Rodar o servidor de desenvolvimento `py manage.py runserver` e acessar a página `http://localhost:8000/` no navegador e verificar se a página `home.html` é exibida corretamente com o cabeçalho e rodapé criados
+
+### Atividade na Aula
+
+- Reproduzir os passos acima
+- Criar uma nova página chamada `sobre.html` que herda do template base e inclui o cabeçalho e rodapé e um conteúdo simples
+
+
+
+
+
 
