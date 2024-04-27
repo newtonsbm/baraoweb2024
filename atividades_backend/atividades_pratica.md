@@ -10,6 +10,8 @@ Prof. Newton Miyoshi - newton.miyoshi@baraodemaua.br
 3. [Atividade 3 - Bancos de Dados e ORM](#atividade-3---bancos-de-dados-e-orm--parte-1): Criar modelo de dados para `Categoria`, criar o migration, carregar as fixtures de categoria e verificar se as categorias foram carregadas corretamente com sqlite browser
 4. [Atividade 4 - Bancos de Dados e ORM - Parte 2](#atividade-4---bancos-de-dados-e-orm---parte-2): Incluir dependência para lidar com imagens no Django ( lib 'Pillow' ), criar modelo de dados para `Cesta` e `Produto` e os relacionamentos entre eles, criar e aplicar migrations, criar e aplicar fixtures.
 5. [Atividade 5 - Administração de Dados](#atividade-5---administração-de-dados): Registrar os modelos de dados no admin do Django, criar super usuário para acessar o admin, verificar se os dados estão sendo exibidos corretamente no admin e cadastrar novos dados
+6. [Atividade 6 - Templates e Componentes](#atividade-6---composição-de-templates-e-componentes): Criar template principal e componentes para cabeçalho e rodapé, compor a página inicial com os componentes criados e a partir do template princinipal
+
 
 ## Atividade 1 - Iniciando Projeto Django
 
