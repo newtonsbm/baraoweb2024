@@ -475,6 +475,7 @@ No Django, a composição de templates é feita através de tags e filtros que p
 
 - Criar os arquivos `header.html` e `footer.html` na pasta `templates/components` 
 - A partir do arquivo `home.html`, extrair a parte do cabeçalho (menu superior) e do rodapé (footer) para componentes que foram criados na pasta `templates/components`
+- Corrigir os links usando a tag `{% url 'nome_da_rota' %}` para que os links funcionem corretamente e o caminho para as imagens com a tag `{% static 'caminho_da_imagem_na_pasta_static' %}`
 
 arquivo `header.html`
 ```html
@@ -485,23 +486,19 @@ arquivo `header.html`
       <i class="bi bi-cup-hot"></i>
     </span>
     <ul>
-      <li><a href="{% url 'principal' %}">Principal</a></li>
-      <li><a href="{% url 'padarias_list' %}">Padarias</a></li>
-      <li><a href="{% url 'cestas_list' %}">Cestas</a></li>
-      <li><a href="{% url 'sobre' %}">Sobre</a></li>
+      <li><a href="index.html">Principal</a></li>
+      <li><a href="">Padarias</a></li>
+      <li><a href="">Cestas</a></li>
+      <li><a href="">Sobre</a></li>
     </ul>
-    {% if user.is_authenticated %}
-      <a href="{% url 'minha_conta' %}" class="btn btn-primary"><i class="bi bi-house"></i> Minha Conta</a>
-    {% else %}
-      <a href="{% url 'login' %}" class="btn btn-primary">Entrar</a>
-    {% endif %}
+    <a href="" class="btn btn-primary">Entrar</a>
   </nav>
 </header>
+ 
 ```
 
 arquivo `footer.html`
 ```html
-{% load static %}
 <footer>
   <span class="logo">
     <i class="bi bi-cup-hot-fill"></i>
@@ -523,7 +520,9 @@ arquivo `footer.html`
 ```
 
 - A tag `{% load static %}` é utilizada para carregar os arquivos estáticos como imagens, css e js dinamicamente
+- A tag `{% url 'nome_da_rota' %}` é utilizada para gerar a URL correta para a rota especificada. No caso do desenvolvimento local a URL será `http://localhost:8000/nome_da_rota` e em produção a URL será algo como `http://www.cafecompao.com/nome_da_rota`
 - No desenvolvimento local, os arquivos estáticos são servidos pelo servidor de desenvolvimento. Em produção, os arquivos estáticos são servidos por um servidor de arquivos estáticos como o `whitenoise`, um bucket (S3 ou GCP) ou uma CDN (Content Delivery Network). Neste caso a tag `static` irá gerar a URL correta para o arquivo estático dependendo do ambiente de execução.
+
 
 ### Criar Template Base Principal
 
