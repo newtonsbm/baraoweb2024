@@ -14,6 +14,7 @@ Prof. Newton Miyoshi - newton.miyoshi@baraodemaua.br
 
 
 ## Atividade 1 - Iniciando Projeto Django
+Realizado em 11/04/24
 
 1. Criar um projeto Django chamado `cafecompao`
 2. Criar aplicação chamada `padarias`
@@ -55,6 +56,7 @@ Por fim, outro conceito importante é da modularização e reuso de código. Tod
 
 
 ## Atividade 2 - Rotas e Arquivos Estáticos
+Realizado em 12/04/24
 
 1. Criar view e rota para a página inicial
 2. Criar configuração de arquivos estáticos (CSS, JS, Imagens)
@@ -152,6 +154,7 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 ## Atividade 3 - Bancos de Dados e ORM 
+Realizado em 25/04/24
 
 1. Criar modelo de dados para `Categoria`
 2. Criar o migration
@@ -304,6 +307,7 @@ Running migrations:
 - Enviar para github com mensagem de commit 'Atividade 3 - Bancos de Dados e ORM parte 1'
 
 ## Atividade 4 - Bancos de Dados e ORM - Parte 2 
+Realizado em 26/04/24
 
 1. Incluir dependência para lidar com imagens no Django ( lib 'Pillow' )
 2. Criar modelo de dados para `Cesta` e `Produto` e os relacionamentos entre eles
@@ -412,6 +416,7 @@ Installed 3 object(s) from 1 fixture(s)
 
 
 ## Atividade 5 - Administração de Dados
+A realizar em 29/04/24
 
 1. Registrar os modelos de dados no admin do Django
 2. Criar super usuário para acessar o admin
@@ -462,13 +467,16 @@ Superuser created successfully.
 - Subir para o github com mensagem de commit 'Atividade 5 - Administração de Dados'
 
 ## Atividade 6 - Composição de Templates e Componentes
+A realizar em 02/04/24
 
 1. Criar template principal e componentes para cabeçalho e rodapé
 2. Compor a página inicial com os componentes criados e a partir do template princnipal
 
 ### Resumo dos Conceitos Importantes
 
-Existem diferentes libs e frameworks que permitem a composição de templates e componentes. Essas libs permitem que os desenvolvedores criem templates reutilizáveis e componentes que podem ser utilizados em diferentes partes da aplicação. Um componente é um bloco de código que pode ser reutilizado em diferentes partes da aplicação. Um componente pode ser um cabeçalho, um rodapé, um menu, um formulário, etc. A composição de templates e componentes é uma técnica poderosa que permite a reutilização de código e a criação de interfaces consistentes. Geralmente, existem 2 formas de reaproveitamento de código a nível de templates html: herança e composição (inclusão). Veja aqui sobre [tipos de sistema de templates](https://en.wikipedia.org/wiki/Web_template_system)
+Existem diferentes libs e frameworks que permitem a composição de templates e componentes. Essas libs permitem que os desenvolvedores criem templates reutilizáveis e componentes que podem ser utilizados em diferentes partes da aplicação. Um componente é um bloco de código que pode ser reutilizado em diferentes partes da aplicação. Um componente pode ser um cabeçalho, um rodapé, um menu, um formulário, etc. A composição de templates e componentes é uma técnica poderosa que permite a reutilização de código e a criação de interfaces consistentes. 
+Frameworks de desenvolvimento web em geral implementam sistemas de templating que usam de duas abordagens principais para construção das páginas web: composição (por meio da inclusão de componentes) e herança (por meio da extensão desses componentes ou templates). 
+Os sistemas de template e componentização variam muito em termos de complexidade indo desde de formas simples como componentes web nativos, passando por sistemas de template que criam componentes de baixa/média complexidade (como é o caso do Django) até sistemas de componentização com JSX que permitem incorporar diversos comportamentos diretamente no componente (como é o caso do React e Svelte).
 No Django, a composição de templates é feita através de tags e filtros que permitem a inclusão de componentes dentro de outros templates. Além disso, o Django possui um sistema de herança de templates que permite a criação de templates base e a extensão desses templates em outros templates. [Ver mais sobre templates em Django.](https://docs.djangoproject.com/en/5.0/topics/templates/)
 
 ### Criar Componentes de Cabeçalho e Rodapé
@@ -560,13 +568,14 @@ arquivo `footer.html`
 ### Compor a Página Inicial
 
 - Alterar o arquivo `home.html` para herdar do template base `base.html` e sobrescrever o bloco de conteúdo
+- Ajustar a url para imagens usando a tag `{% static 'caminho_da_imagem_na_pasta_static' %}`
 
 ```html
 {% extends 'base.html' %}
 
 {% block conteudo %}  
 
-<div id="hero" style="background-image: url(/static/images/cafepaoHero.png)">
+<div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %)">
   <hgroup>
     <h1>Assine sua manhã perfeita!</h1>
     <p>
@@ -576,7 +585,7 @@ arquivo `footer.html`
 </div>
 
 <section class="featured container">
-  <img src="/static/images/breadsHome.png" alt="cesta com paes">
+  <img src="{% static 'images/breadsHome.png' %}" alt="cesta com paes">
   <div>
     <h2>Cestas com produtos perfeitos!</h2>
     <p>
@@ -611,7 +620,189 @@ arquivo `footer.html`
 - Criar uma nova página chamada `sobre.html` que herda do template base e inclui o cabeçalho e rodapé e um conteúdo simples
 
 
+## Atividade 7 - List e Detail das Cestas com Views Baseada em Classes
+A realizar em 03/05/24
 
+1. Criar views baseadas em classes para listar, detalhar as cestas e produtos
+2. Criar templates para listar e detalhar as cestas e produtos
+3. Criar rotas para as views de listagem e detalhamento de cestas e produtos
+4. Alterar o menu principal para incluir links para as páginas de listagem de cestas
+
+### Resumo dos Conceitos Importantes
+Frameworks web fullstack geralmente usam 2 abordagens para escrita da lógica responsável por lidar com as requisições web: por meio de funções ou com orientação a objetos por meio de classes. Alguns dos frameworks leves que utilizam a abordagem de funções são: Flask, FastAPI, ExpressJS. Já os frameworks mais robustos como Ruby on Rails, CakePHP, Spring Boot, entre outros,  utilizam a abordagem de classes. Django permite os dois tipos de abordagens. 
+Geralmente a abordagem por funções é mais simples, direta e flexível, porém necessita que o desenvolvedor tenha um bom controle sobre o código e a organização do projeto. Já a abordagem por classes é mais robusta, organizada e escalável, porém necessita que o desenvolvedor tenha um bom conhecimento sobre orientação a objetos e sobre o framework em si.
+No Django, as views baseadas em classes são classes que herdam de classes base do Django e possuem métodos que representam as ações que podem ser realizadas em uma requisição. [Ver mais sobre views baseadas em classes em Django.](https://docs.djangoproject.com/en/5.0/topics/class-based-views/)
+
+### Listar Cestas
+Para permitir a listagem das cestas vamos: (i) criar view basead em classe `CestaListView`, (ii) criar a rota para a view de listagem de cestas alterando o arquivo `urls.py`, (iii) criar o template `cestas_list.html` e (iv) alterar o menu principal para incluir um link para a página de listagem de cestas.
+
+- Criar a view baseada em classe `CestaList` em `padarias/views.py`
+
+```python
+# importar no inicio do arquivo
+from django.views import generic
+
+class CestasList(generic.ListView):
+    model = Cesta
+    template_name = 'padarias/cestas_list.html'
+    context_object_name = 'cesta_list'
+```
+
+- Criar a rota para a view de listagem de cestas em `cafecompao/urls.py`
+
+```python
+# Mostrando somente a parte que foi alterada
+# Incluir um novo item em urlpatterns:
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', views.home),
+    path('cestas/', views.CestasList.as_view(), name='cestas_list'),  # adicionar essa linha
+] 
+```
+
+- Criar o template `cestas_list.html` em `templates/padarias` baseado no prototipo `prototipo/cestas.html`
+
+```html
+{% extends 'base.html' %}
+
+{% block conteudo %}  
+
+<div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %})">
+  <hgroup>
+    <h1>Cestas para todos gostos!</h1>
+  </hgroup>
+</div>
+
+<section class="container card-container">
+  {% for cesta in cesta_list %}
+    <a href="" class="card">
+      <img src="{{ cesta.image.url }}" alt="cesta">
+      <div class="card-detail">
+        <h3>{{ cesta.nome }}</h3>
+        <p>{{ cesta.descricao }} </p>
+        <span class="preco">{{ cesta.preco }}</span>
+      </div>
+    </a>
+  {% endfor %}
+</section>
+
+{% endblock %}
+```
+
+- Alterar o menu principal em `templates/components/header.html` para incluir um link para a página de listagem de cestas
+- Mostrando somente a parte que foi alterada
+```html
+  <ul>
+    <li><a href="{% url 'home' %}">Principal</a></li>
+    <li><a href="{% url 'cestas_list' %}">Cestas</a></li>
+    <li><a href="">Padarias</a></li>
+    <li><a href="">Sobre</a></li>
+  </ul>
+```
+
+### Detalhar Cesta
+
+- Para criar a página de detalhe da Cesta vamos: (i) criar view baseada em classe `CestaDetailView`, (ii) criar a rota para a view de detalhamento de cestas alterando o arquivo `urls.py`, (iii) criar o template `cestas_detail.html` e (iv) alterar o template de listagem de cestas para incluir um link para a página de detalhamento de cestas.
+
+- Criar a view baseada em classe `CestasDetail` em `padarias/views.py`
+
+```python
+class CestasDetail(DetailView):
+    model = Cesta
+    template_name = 'padarias/detail_cestas.html'
+```
+
+- Criar a rota para a view de detalhamento de cestas em `cafecompao/urls.py`
+
+```python
+# Mostrando somente a parte que foi alterada
+# Incluir um novo item em urlpatterns:
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', views.home),
+    path('cestas/', views.CestasList.as_view(), name='cestas_list'),  
+    path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),  # adicionar essa linha
+] 
+```
+
+- Criar o template `cestas_detail.html` em `templates/padarias` baseado no prototipo `prototipo/cestas_detail.html`
+
+```html
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block conteudo %}
+
+<section class="hero-detail">
+  <div class="container">
+    <div class="cesta-detail">
+      <h1>{{ cesta.nome }}</h1>
+      <p>{{ cesta.descricao }}</p>
+      <span class="cesta-preco">{{ cesta.preco }} / mês</span>
+    </div>
+    <img src="{{ cesta.imagem.url }}" alt="imagem da cesta">
+  </div>
+</section>
+
+<section class="container cesta-produtos">
+  <h2>Veja os produtos dessa cesta</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Descrição</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for produto in cesta.produtos.all %}
+      <tr>
+        <td>{{ produto.nome }}</td>
+        <td>{{ produto.descricao }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'cestas_list' %}" class="btn btn-primary btn-lg">Voltar</a>
+</section>
+
+{% endblock %}
+```
+
+- Alterar o template `cestas_list.html` para incluir um link para a página de detalhamento de cestas
+- Mostrando somente a parte que foi alterada
+```html
+{% for cesta in cesta_list %}
+  <a href="{% url 'cestas_detail' cesta.id %}" class="card">
+    <img src="{{ cesta.imagem.url }}" alt="cesta">
+    <div class="card-detail">
+      <h3>{{ cesta.nome }}</h3>
+      <p>{{ cesta.descricao }} </p>
+      <span class="preco">{{ cesta.preco }}</span>
+    </div>
+  </a>
+{% endfor %}
+```
+
+### Atividade na Aula
+
+- Reproduzir os passos acima
+- Criar a página de Listagem de Padarias
+- Caso dê tempo crie a página de Detalhe da Padaria (não é obrigatório pois não possui o protótipo)
+- Subir para o github com mensagem de commit 'Atividade 7 - List e Detail das Cestas com Views Baseada em Classes'
+
+
+## Atividade 8 - Autenticação e Autorização 
+A realizar em 09/05/24
+
+1. Configurar página de login 
+2. Configurar área restrita para usuários autenticados
+
+## Atividade 9 - CRUD Create e Update da Assinatura
+A realizar em 10/05/24
+
+## Atividade 10 - CRUD Delete da Assinatura
+A realizar em 16/05/24
 
 
 
