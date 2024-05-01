@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-# importar os models
+from django.views import generic
 from .models import Padaria, Produto, Cesta
 
 def home(request): 
@@ -19,3 +19,14 @@ def about(request):
 
 def contact(request):
     return HttpResponse('Entre em contato')
+
+class CestasList(generic.ListView):
+    model = Cesta
+    template_name = 'padarias/cestas_list.html'
+    context_object_name = 'cesta_list'
+
+class CestasDetail(generic.DetailView):
+    model = Cesta
+    template_name = 'padarias/cestas_detail.html'
+    context_object_name = 'cesta'
+
