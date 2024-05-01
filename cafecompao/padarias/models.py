@@ -53,3 +53,39 @@ class Cesta(models.Model):
 
     def __str__(self):
         return self.nome
+
+class Padaria(models.Model):
+    nome = models.CharField(
+        verbose_name="Nome", max_length=100, unique=True, null=False, blank=False, help_text="Nome da padaria")
+    descricao = models.TextField(
+        verbose_name="Descrição", null=True, blank=True, help_text="Descrição da padaria")
+    cestas = models.ManyToManyField(
+        'Cesta', verbose_name="Cestas", help_text="Cestas da padaria", related_name="padarias")
+    imagem = models.ImageField(
+        verbose_name="Imagem", upload_to="padarias", null=True, blank=True, help_text="Imagem da padaria")
+
+    def __str__(self):
+        return self.nome
+
+
+class Endereco(models.Model):
+    rua = models.CharField(
+        verbose_name="Rua", max_length=100, null=False, blank=False, help_text="Rua do endereço")
+    numero = models.CharField(
+        verbose_name="Número", max_length=10, null=False, blank=False, help_text="Número do endereço")
+    complemento = models.CharField(
+        verbose_name="Complemento", max_length=100, null=True, blank=True, help_text="Complemento do endereço")
+    bairro = models.CharField(
+        verbose_name="Bairro", max_length=100, null=True, blank=True, help_text="Bairro do endereço")
+    cidade = models.CharField(
+        verbose_name="Cidade", max_length=100, null=False, blank=False, help_text="Cidade do endereço")
+    estado = models.CharField(
+        verbose_name="Estado", max_length=2, null=False, blank=False, help_text="Estado do endereço")
+    cep = models.CharField(
+        verbose_name="CEP", max_length=8, null=False, blank=False, help_text="CEP do endereço")
+    padaria = models.OneToOneField(
+        Padaria, on_delete=models.CASCADE, verbose_name="Padaria", null=True, help_text="Padaria do endereço", related_name="endereco"
+    )
+
+    def __str__(self):
+        return f"{self.rua}, {self.numero} - {self.cidade}/{self.estado}"
