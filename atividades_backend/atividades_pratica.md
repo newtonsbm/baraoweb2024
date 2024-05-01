@@ -494,7 +494,7 @@ arquivo `header.html`
       <i class="bi bi-cup-hot"></i>
     </span>
     <ul>
-      <li><a href="index.html">Principal</a></li>
+      <li><a href="{% url 'home' %}">Principal</a></li>
       <li><a href="">Padarias</a></li>
       <li><a href="">Cestas</a></li>
       <li><a href="">Sobre</a></li>
@@ -507,6 +507,7 @@ arquivo `header.html`
 
 arquivo `footer.html`
 ```html
+{% load static %}
 <footer>
   <span class="logo">
     <i class="bi bi-cup-hot-fill"></i>
@@ -530,6 +531,14 @@ arquivo `footer.html`
 - A tag `{% load static %}` é utilizada para carregar os arquivos estáticos como imagens, css e js dinamicamente
 - A tag `{% url 'nome_da_rota' %}` é utilizada para gerar a URL correta para a rota especificada. No caso do desenvolvimento local a URL será `http://localhost:8000/nome_da_rota` e em produção a URL será algo como `http://www.cafecompao.com/nome_da_rota`
 - No desenvolvimento local, os arquivos estáticos são servidos pelo servidor de desenvolvimento. Em produção, os arquivos estáticos são servidos por um servidor de arquivos estáticos como o `whitenoise`, um bucket (S3 ou GCP) ou uma CDN (Content Delivery Network). Neste caso a tag `static` irá gerar a URL correta para o arquivo estático dependendo do ambiente de execução.
+- A rota `home` é a rota que foi criada anteriormente para a página inicial, porém estava sem um `name`, adicionar o name no arquivo `cafecompao/urls.py` para que a tag `{% url 'home' %}` funcione corretamente
+
+```python
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', views.home, name='home'),  # adicionado o parametro name='home'
+] 
+``` 
 
 
 ### Criar Template Base Principal
@@ -573,9 +582,11 @@ arquivo `footer.html`
 ```html
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block conteudo %}  
 
-<div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %)">
+<div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %}">
   <hgroup>
     <h1>Assine sua manhã perfeita!</h1>
     <p>
@@ -613,6 +624,46 @@ arquivo `footer.html`
 - No arquivo `home.html` estamos sobrescrevendo o bloco de conteúdo `{% block conteudo %}` com o conteúdo específico da página inicial
 - O comando `{% extends 'base.html' %}` é utilizado para herdar do template base `base.html`
 - Rodar o servidor de desenvolvimento `py manage.py runserver` e acessar a página `http://localhost:8000/` no navegador e verificar se a página `home.html` é exibida corretamente com o cabeçalho e rodapé criados
+
+### Adicionar conteúdo do Banco de Dados
+
+- Queremos incluir a quantidade de padarias, cestas e produtos que temos na base de dados na nossa view, tornando-a dinâmica.
+- Para isso vamos alterar nossa view `home` para que ela busque esses dados no banco de dados e passe para o template `home.html` e renderize esses dados na página
+- No arquivo `views.py`
+
+```python
+# importar os models
+from .models import Padaria, Produto, Cesta
+
+def home(request): 
+    qtd_padarias = Padaria.objects.count()
+    qtd_produtos = Produto.objects.count()
+    qtd_cestas = Cesta.objects.count()
+    context = {
+        'qtd_padarias': qtd_padarias,
+        'qtd_produtos': qtd_produtos,
+        'qtd_cestas': qtd_cestas,
+    }
+    return render(request, 'home.html', context)
+
+```
+
+- Agora precisamos alterar o componente `hero` do template `home.html`
+- A seguir somente a parte que foi alterada incluindo as variáveis dinâmicas `qtd_padarias`, `qtd_produtos` e `qtd_cestas` passadas por contexto para o template
+
+```html
+<div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %}">
+  <hgroup>
+    <h1>Assine sua manhã perfeita!</h1>
+    <p>
+      Comece suas manhãs com sabor e praticidade Assine o Café com Pão!
+    </p>
+    <p>
+      São {{ qtd_padarias }} padarias parceiras, {{ qtd_cestas }} tipos de cestas incríveis com {{ qtd_produtos }} produtos disponíveis para você escolher.
+    </p>
+  </hgroup>
+</div>
+```
 
 ### Atividade na Aula
 
@@ -664,6 +715,7 @@ urlpatterns = [
 
 ```html
 {% extends 'base.html' %}
+{% load static %}
 
 {% block conteudo %}  
 
@@ -676,7 +728,7 @@ urlpatterns = [
 <section class="container card-container">
   {% for cesta in cesta_list %}
     <a href="" class="card">
-      <img src="{{ cesta.image.url }}" alt="cesta">
+      <img src="{{ cesta.imagem.url }}" alt="cesta">
       <div class="card-detail">
         <h3>{{ cesta.nome }}</h3>
         <p>{{ cesta.descricao }} </p>
@@ -691,6 +743,7 @@ urlpatterns = [
 
 - Alterar o menu principal em `templates/components/header.html` para incluir um link para a página de listagem de cestas
 - Mostrando somente a parte que foi alterada
+
 ```html
   <ul>
     <li><a href="{% url 'home' %}">Principal</a></li>
@@ -700,6 +753,11 @@ urlpatterns = [
   </ul>
 ```
 
+- As imagens das cestas não estarão sendo exibidas pois não criamos os arquivos de media. Para isso, copia a pasta `media` que esta na pasta `prototipo` para a raiz do projeto, ou seja, a pasta `media` ficará na mesma pasta que o arquivo `manage.py` e a pasta  `static`.
+- A estrutura de pasta será:
+
+![Estrutura de Pastas Final](folder4.png)]
+
 ### Detalhar Cesta
 
 - Para criar a página de detalhe da Cesta vamos: (i) criar view baseada em classe `CestaDetailView`, (ii) criar a rota para a view de detalhamento de cestas alterando o arquivo `urls.py`, (iii) criar o template `cestas_detail.html` e (iv) alterar o template de listagem de cestas para incluir um link para a página de detalhamento de cestas.
@@ -707,7 +765,7 @@ urlpatterns = [
 - Criar a view baseada em classe `CestasDetail` em `padarias/views.py`
 
 ```python
-class CestasDetail(DetailView):
+class CestasDetail(generic.DetailView):
     model = Cesta
     template_name = 'padarias/detail_cestas.html'
 ```
@@ -785,9 +843,6 @@ urlpatterns = [
 ```
 
 ### Atividade na Aula
-  Hellow! I exist 
-  
-  and i am here
 - Reproduzir os passos acima
 - Criar a página de Listagem de Padarias
 - Caso dê tempo crie a página de Detalhe da Padaria (não é obrigatório pois não possui o protótipo)
