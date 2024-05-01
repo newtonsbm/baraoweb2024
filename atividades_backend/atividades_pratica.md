@@ -785,7 +785,9 @@ urlpatterns = [
 ```
 
 ### Atividade na Aula
-
+  Hellow! I exist 
+  
+  and i am here
 - Reproduzir os passos acima
 - Criar a página de Listagem de Padarias
 - Caso dê tempo crie a página de Detalhe da Padaria (não é obrigatório pois não possui o protótipo)

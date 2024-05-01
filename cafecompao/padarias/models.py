@@ -34,7 +34,6 @@ class Produto(models.Model):
 
 
 class Cesta(models.Model):
-
     class Niveis(models.TextChoices):
         BASICO = 'B', 'Básico'
         MEDIO = 'M', 'Médio'
@@ -43,8 +42,6 @@ class Cesta(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nome = models.CharField(
         verbose_name="Nome", max_length=100, unique=True, null=False, blank=False, help_text="Nome da cesta")
-    descricao = models.TextField(
-        verbose_name="Descrição", null=True, blank=True, help_text="Descrição da cesta")
     preco = models.DecimalField(
         verbose_name="Preço", max_digits=10, decimal_places=2, null=False, blank=False, help_text="Preço da cesta")
     produtos = models.ManyToManyField(
