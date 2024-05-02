@@ -7,10 +7,11 @@ Prof. Newton Miyoshi - newton.miyoshi@baraodemaua.br
 
 1. [Atividade 1 - Iniciando Projeto Django](#atividade-1---iniciando-projeto-django): Criar um projeto Django chamado `cafecompao` e uma aplicação chamada `padarias`
 2. [Atividade 2 - Rotas e Arquivos Estáticos](#atividade-2---rotas-e-arquivos-estáticos): Criar view e rota para a página inicial e configurar arquivos estáticos (CSS, JS, Imagens)
-3. [Atividade 3 - Bancos de Dados e ORM](#atividade-3---bancos-de-dados-e-orm--parte-1): Criar modelo de dados para `Categoria`, criar o migration, carregar as fixtures de categoria e verificar se as categorias foram carregadas corretamente com sqlite browser
+3. [Atividade 3 - Bancos de Dados e ORM](#atividade-3---bancos-de-dados-e-orm): Criar modelo de dados para `Categoria`, criar o migration, carregar as fixtures de categoria e verificar se as categorias foram carregadas corretamente com sqlite browser
 4. [Atividade 4 - Bancos de Dados e ORM - Parte 2](#atividade-4---bancos-de-dados-e-orm---parte-2): Incluir dependência para lidar com imagens no Django ( lib 'Pillow' ), criar modelo de dados para `Cesta` e `Produto` e os relacionamentos entre eles, criar e aplicar migrations, criar e aplicar fixtures.
 5. [Atividade 5 - Administração de Dados](#atividade-5---administração-de-dados): Registrar os modelos de dados no admin do Django, criar super usuário para acessar o admin, verificar se os dados estão sendo exibidos corretamente no admin e cadastrar novos dados
 6. [Atividade 6 - Templates e Componentes](#atividade-6---composição-de-templates-e-componentes): Criar template principal e componentes para cabeçalho e rodapé, compor a página inicial com os componentes criados e a partir do template princinipal
+7. [Atividade 7 - Listagem de Dados](#atividade-7---list-e-detail-das-cestas-com-views-baseada-em-classes): Criar view e template para listar as cestas e produtos cadastrados
 
 
 ## Atividade 1 - Iniciando Projeto Django
@@ -846,14 +847,271 @@ urlpatterns = [
 - Reproduzir os passos acima
 - Criar a página de Listagem de Padarias
 - Caso dê tempo crie a página de Detalhe da Padaria (não é obrigatório pois não possui o protótipo)
-- Subir para o github com mensagem de commit 'Atividade 7 - List e Detail das Cestas com Views Baseada em Classes'
+- Subir para o github com mensagem de commit 'Atividade 7 - List e Detail'
 
 
 ## Atividade 8 - Autenticação e Autorização 
 A realizar em 09/05/24
 
-1. Configurar página de login 
-2. Configurar área restrita para usuários autenticados
+1. Configurar model de Assinatura
+2. Configurar rotas e mecanismo de autenticação
+3. Implementar template de login 
+4. Configurar área restrita para usuários autenticados
+
+### Resumo dos Conceitos Importantes
+- Autenticação é o processo de verificar a identidade de um usuário. A autenticação pode ser feita de diferentes formas tais como: por meio de um login e senha, por meio de um token, por meio de um certificado digital, por meio de um biometria, por meio de um provedor de autenticidade, entre outras formas. A autenticação é um processo fundamental para garantir a segurança dos dados e a privacidade dos usuários. 
+- Autorização é o processo de verificar se um usuário tem permissão para acessar um recurso. A autorização é feita de diferentes formas tais como: por meio de um controle de acesso, por meio de um controle de permissões, por meio de um controle de papéis, por meio de um controle de políticas, entre outras formas. A autorização é um processo fundamental para garantir a segurança dos dados e a privacidade dos usuários definindo exatamente quem pode acessar o que.
+- Frameworks web no geral possuem mecanismos de autenticação e autorização que permitem a criação de áreas restritas e a definição de permissões de acesso. No Django, o mecanismo de autenticação e autorização é baseado em middlewares e decorators que permitem a criação de áreas restritas e a definição de permissões de acesso. [Ver mais sobre autenticação e autorização em Django.](https://docs.djangoproject.com/en/5.0/topics/auth/)
+- Django já possui um sistema de autenticação e autorização composto por 3 models principais: User, Group e Permission. O model User é responsável por armazenar os dados do usuário, o model Group é responsável por agrupar usuários e o model Permission é responsável por definir as permissões de acesso. 
+
+### Configurar Model de Assinatura
+- Vamos detalhar o DER com a tabela Assinatura que liga User com um determinado tipo de Cesta.
+- Lembrando que o Django já tem um model para User pré-definido
+
+![DER Atualizado](erd2.png)]
+
+- Criar o model de Assinatura em `padarias/models.py`
+
+```python
+
+class Assinatura(models.Model):
+    user = models.OneToOneField(
+        'auth.User', on_delete=models.CASCADE, verbose_name="Usuário", null=False, help_text="Usuário da assinatura", related_name="assinatura")
+    cesta = models.OneToOneField(
+        Cesta, on_delete=models.CASCADE, verbose_name="Cesta", null=False, help_text="Cesta da assinatura", related_name="assinatura")
+    data_inicio = models.DateField("Data de início", null=False, blank=False, help_text="Data de início da assinatura")
+    observacao = models.TextField("Observação", null=True, blank=True, help_text="Observação da assinatura")
+
+```
+- Veja que o model Assinatura tem relacionamento 1-1 com `auth.User` que é o model de Usuário padrão do Django
+- Criar migration com comando `py manage.py makemigrations` e aplicar a migration com comando `py manage.py migrate`
+
+
+### Configurar Rotas e Mecanismo de Autenticação
+
+- Incluir as rotas de autenticação pré-definidas em `cafecompao/urls.py`
+
+```python
+  from django.contrib import admin
+  from django.conf import settings
+  from django.conf.urls.static import static
+  from django.urls import path, include # adicionar include nos imports
+  from padarias import views
+
+  urlpatterns = [
+      path('admin/', admin.site.urls),
+      path('auth/', include('django.contrib.auth.urls')), # adicionar essa linha 
+      path('', views.home, name='home'),
+      path('cestas/', views.CestasList.as_view(), name='cestas_list'),  
+      path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),  
+      path('padarias/', views.PadariasList.as_view(), name='padarias_list'),  
+  ] 
+  urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
+  urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) 
+```
+
+### Implementar Template de Login
+
+- O modulo de autenticação do django tem como pasta default de templates a pasta `registration` dentro da pasta `templates`
+- A view `login` necessita que seja implementado o template `login.html` dentro da pasta `registration`
+- Criar pasta `templates/registration` e criar o arquivo `templates/registration/login.html` com o seguinte conteúdo
+
+```html
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<div class="container login">
+  <h1>Entre na sua conta</h1>
+  <form action="{% url 'login' %}" method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="username" class="form-label">Nome de Usuário</label>
+      <input type="text" class="form-control" id="username" name="username">
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Senha</label>
+      <input type="password" class="form-control" id="password" name="password">
+    </div>
+    <button class="btn btn-primary btn-lg" type="submit">Entrar</button>
+  </form>
+</div>
+{% endblock %}
+```
+
+- A view de `login` espera receber o `username` e `password` via POST após o envio do formulário 
+- Alterar o componente `header.html` para incluir um link para a página de login caso o usuário esteja deslogado e caso ele esteja logado enviar para "Minha Conta" que será criada posteriormente
+
+```html
+<header>
+  <nav>
+    <span class="logo">
+      Café com Pão
+      <i class="bi bi-cup-hot"></i>
+    </span>
+    <ul>
+      <li><a href="{% url 'home' %}">Principal</a></li>
+      <li><a href="{% url 'cestas_list' %}">Cestas</a></li>
+      <li><a href="{% url 'padarias_list' %}">Padarias</a></li>
+      <li><a href="">Sobre</a></li>
+    </ul>
+    {% if user.is_authenticated %}
+      <a href="" class="btn btn-primary">Minha Conta</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn btn-primary">Entrar</a>
+    {% endif %}
+  </nav>
+</header>
+```
+
+- A estrutura de pasta após a criação do template anterior fica a seguinte:
+
+![Estrutura de Pastas com Autenticação](folder5.png)]
+
+- Rodar o servidor de desenvolvimento `py manage.py runserver` e acessar a página de login pelo menu superior e verificar se a página de login é exibida corretamente
+- Caso tente logar o sistema irá retornar um erro pois ainda não foi implementado a página de redirecionamento após o login
+
+### Configurar Área Restrita para Usuários Autenticados
+
+- Vamos implementar uma página chamada "Minha Conta" que só será exibido para usuários autenticados
+- Para isso vamos criar uma view baseada em função de forma protegida, que somente usuários autenticados podem acessar
+- Após criar view, é necessário definir a rota em `urls.py` e o template `minha_conta.html` em `templates/padarias`. Essa área logada terá um menu lateral compartilhado entre todas as telas de usuário logado então criaremos um nome layout para essa área logada
+- Criar view `minha_conta` em `padarias/views.py`
+
+```python
+# inserir no inicio do arquivo
+from django.contrib.auth.decorators import login_required 
+
+@login_required
+def minha_conta(request):
+    return render(request, 'padarias/minha_conta.html')
+``` 
+
+- Criar a rota para a view de "Minha Conta" em `cafecompao/urls.py`
+
+```python
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('auth/', include('django.contrib.auth.urls')),
+    path('', views.home, name='home'),
+    path('cestas/', views.CestasList.as_view(), name='cestas_list'),  
+    path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),  
+    path('padarias/', views.PadariasList.as_view(), name='padarias_list'),  
+    path('minha_conta', views.minha_conta, name='minha_conta'), # adiciona essa linha
+] 
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+``` 
+
+- Definiremos um novo template base para área logada que herdará do template base principal e incluirá um menu lateral com links para as páginas de "Minha Conta", "Nova Assinatura" e "Logout". A página de "Minha Conta" terá um texto simples de boas vindas com os dados do usuário logado.
+- Criar os arquivos vazios para isso. O template base para área logada ficara em `templates/base_logada.html`. O componente de menu lateral ficará em `templates/components/menu_logado.html` e o template de "Minha Conta" ficará em `templates/padarias/minha_conta.html`
+
+#### Componente Menu Logado
+
+- No arquivo `menu_logado.html` em `templates/components` adicionar o seguinte conteúdo
+
+```html
+<nav>
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'minha_conta' %}">
+        <i class="bi bi-house"></i> Minha Conta
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="">
+        <i class="bi bi-basket3-fill"></i> Nova Assinatura
+      </a>
+    </li>
+    <li class="nav-item">
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="nav-link">
+          <i class="bi bi-door-closed"></i> Sair
+        </button>
+      </form>
+    </li>
+  </ul>
+</nav>
+```
+- Perceba que o link de "Nova Assinatura" está vazio por enquanto, vamos definir depois
+
+#### Template Base Logada
+
+- No arquivo `base_logada.html` em `templates` adicionar o seguinte conteúdo
+
+```html
+{% extends 'base.html' %}
+{% load static %}
+
+{% block conteudo %}
+<div class="container" id="area-logada">
+  <aside>
+    {% include 'components/menu_logado.html' %}
+  </aside>
+  <section>
+    {% block area_logada %}
+    {% endblock %}
+  </section>
+</div>
+{% endblock %}
+```
+
+- Esse template é simples pois só inclui o menu lateral e um bloco de conteúdo que será sobrescrito pelos templates filhos
+
+#### Template Minha Conta
+
+- No arquivo `minha_conta.html` em `templates/padarias` adicionar o seguinte conteúdo
+
+```html
+{% extends 'base_logada.html' %}
+{% block area_logada %}
+  <h1>Minha Conta</h1>
+  <h2>Informações Pessoais</h2>
+  <br>
+  <ul>
+    <li><b>Nome: </b>{{ user.first_name }} {{ user.last_name }} </li>
+    <li><b>Nome de usuário: </b>{{user.username}}</li>
+    <li><b>E-mail:</b> {{ user.email }} </li>
+  </ul>
+  <h2>Assinatura Atual:</h2>
+  {% if user.assinatura %}
+    <ul>
+      <li><b>Cesta: </b>{{ user.assinatura.cesta }}</li>
+      <li><b>Data de início: </b>{{ user.assinatura.data_inicio | date:"r" }}</li>
+    </ul>
+  {% else %}
+    <p>Você ainda não possui uma assinatura de cesta de café da manhã.</p>
+  {% endif %}
+{% endblock %}
+```
+
+- Rodar o servidor de desenvolvimento `py manage.py runserver` e acessar a página de login pelo menu superior e verificar se a página de login é exibida corretamente
+- Após a criação dos arquivos a estrutura de pasta ficará a seguinte:
+
+![Estrutura de Pastas com Autenticação](folder6.png)]
+
+- Ajustar o link de "Minha Conta" em `templates/components/header.html`
+- Mostrando somente a parte a ser alterada: 
+```html
+  {% if user.is_authenticated %}
+    <a href="{% url 'minha_conta' %}" class="btn btn-primary">Minha Conta</a>
+  {% else %}
+    <a href="{% url 'login' %}" class="btn btn-primary">Entrar</a>
+  {% endif %}
+```
+
+- Por fim, em `cafecompao/settings.py` adicionar a rota de redirecionamento após o login para a página de "Minha Conta"
+
+```python
+# Adicionar no final de settings.py
+LOGIN_REDIRECT_URL = 'minha_conta'
+LOGOUT_REDIRECT_URL = 'login'
+```
+
+### Atividade na Aula
+- Reproduzir os passos acima
+- Enviar para o github com mensagem de commit 'Atividade 8 - Autenticação e Autorização'
+
 
 ## Atividade 9 - CRUD Create e Update da Assinatura
 A realizar em 10/05/24
