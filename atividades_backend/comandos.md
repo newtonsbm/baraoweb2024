@@ -26,6 +26,10 @@ python manage.py makemigrations
 - Aplicar migration
 python manage.py migrate
 
+# Reesetar o banco
+- No SQLite basta deletar o arquivo db.sqlite3 e rodar as migrations novamente
+- Se houver problemas em migrations basta deletar o banco, deletar todas as migrations e criar novamenteCestas
+
 # Auth
 
 - Criar super usuário
