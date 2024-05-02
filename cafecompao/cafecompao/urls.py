@@ -17,14 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path
+from django.urls import path, include 
 from padarias import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('auth/', include('django.contrib.auth.urls')),
     path('', views.home, name='home'),
     path('cestas/', views.CestasList.as_view(), name='cestas_list'),  
-    path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),  # adicionar essa linha
+    path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),  
+    path('padarias/', views.PadariasList.as_view(), name='padarias_list'),  
+    path('minha_conta', views.minha_conta, name='minha_conta'), # adiciona essa linha
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
