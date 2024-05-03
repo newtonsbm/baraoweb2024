@@ -11,7 +11,9 @@ Prof. Newton Miyoshi - newton.miyoshi@baraodemaua.br
 4. [Atividade 4 - Bancos de Dados e ORM - Parte 2](#atividade-4---bancos-de-dados-e-orm---parte-2): Incluir dependência para lidar com imagens no Django ( lib 'Pillow' ), criar modelo de dados para `Cesta` e `Produto` e os relacionamentos entre eles, criar e aplicar migrations, criar e aplicar fixtures.
 5. [Atividade 5 - Administração de Dados](#atividade-5---administração-de-dados): Registrar os modelos de dados no admin do Django, criar super usuário para acessar o admin, verificar se os dados estão sendo exibidos corretamente no admin e cadastrar novos dados
 6. [Atividade 6 - Templates e Componentes](#atividade-6---composição-de-templates-e-componentes): Criar template principal e componentes para cabeçalho e rodapé, compor a página inicial com os componentes criados e a partir do template princinipal
-7. [Atividade 7 - Listagem de Dados](#atividade-7---list-e-detail-das-cestas-com-views-baseada-em-classes): Criar view e template para listar as cestas e produtos cadastrados
+7. [Atividade 7 - Listagem e Detalhe de Dados](#atividade-7---list-e-detail-das-cestas-com-views-baseada-em-classes): Criar view e template para listar as cestas e produtos cadastrados
+8. [Atividade 8 - Autenticação e Autorização](#atividade-8---autenticação-e-autorização): Configurar autenticação e configurar area logada e página de login
+
 
 
 ## Atividade 1 - Iniciando Projeto Django
@@ -665,6 +667,92 @@ def home(request):
   </hgroup>
 </div>
 ```
+
+### Página "Sobre" com Formulário
+- Vamos incluir uma nova página "Sobre" que contem o formulário de contato e uma lista das padarias
+- Para isso precisamos: altera a view `about` com a lógica, incluir a rota nova em `urls.py`, criar o template `sobre.html` e incluir o link para essa página no `header.html`
+- Primeiramente vamos alterar a view `about` em `padarias/views.py`
+
+```python
+def about(request):
+    qtd_padarias = Padaria.objects.count()
+    padarias = Padaria.objects.all()
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        email = request.POST.get('email')
+        mensagem = request.POST.get('mensagem')
+        print("Enviando email-------------------------")
+        print(f"Nome: {nome}, Email: {email}, Mensagem: {mensagem}")
+        print("-----------------------------------------")
+        msg_sucesso = "Mensagem enviada com sucesso!"
+    context = {
+        'qtd_padarias': qtd_padarias,
+        'padarias': padarias
+    }
+    return render(request, 'sobre.html', context) 
+
+- Criar a rota para a view `about` em `cafecompao/urls.py`
+
+```python
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', views.home, name='home'),
+    path('sobre', views.about, name='about'),
+] 
+```
+
+- Criar a página `sobre.html` em `templates/` baseado no prototipo `prototipo/sobre.html`
+
+```html
+{% extends 'base.html' %}
+{% load static %}
+
+{% block conteudo %}
+<div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %})">
+  <hgroup>
+    <h1>Sobre o Café com Pão!</h1>
+    <p>Temos {{ qtd_padarias }} padarias na nossa rede!</p>
+  </hgroup>
+</div>
+
+<section class="social-container">
+  <div class="container">
+    <h2>Nossa Rede</h2>
+    <p>
+      {% for padaria in padarias %}
+        {{ padaria.nome }} em {{ padaria.endereco.bairro }} / {{ padaria.endereco.cidade }}<br>
+      {% endfor %}
+    </p>
+  </div>
+</section>
+
+<section class="container contato">
+  <h2>Fale Conosco!</h2>
+
+  <form action="{% url 'about' %}" method="post">
+    <input type="hidden" name="csrfmiddlewaretoken"
+      value="WNXHj9DAM9LqCq0dHdXco3zs2eYM1k5PkC5ORnZi55yzDAiHhCN6NpfrF9BfKiVS">
+    <div class="mb-3">
+      <label for="email" class="form-label">Seu e-mail</label>
+      <input type="email" class="form-control" id="email" name="email" required >
+    </div>
+    <div class="mb-3">
+      <label for="nome" class="form-label">Seu nome</label>
+      <input type="text" class="form-control" id="nome" name="nome" required>
+    </div>
+    <div class="mb-3">
+      <label for="mensagem" class="form-label">Mensagem:</label>
+      <textarea class="form-control" id="mensagem" name="mensagem" rows="6" required></textarea>
+    </div>
+    <button class="btn btn-primary btn-lg" type="submit">Enviar</button>
+  </form>
+
+</section>
+{% endblock %}
+```
+
+- Alterar o menu principal em `templates/components/header.html` para incluir um link para a página de listagem de cestas
+
 
 ### Atividade na Aula
 
