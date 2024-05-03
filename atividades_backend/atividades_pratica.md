@@ -994,6 +994,7 @@ class Assinatura(models.Model):
     cesta = models.OneToOneField(
         Cesta, on_delete=models.CASCADE, verbose_name="Cesta", null=False, help_text="Cesta da assinatura", related_name="assinatura")
     data_inicio = models.DateField("Data de início", null=False, blank=False, help_text="Data de início da assinatura")
+    data_fim = models.DateField("Data de término", null=False, blank=False, help_text="Data de término da assinatura")
     observacao = models.TextField("Observação", null=True, blank=True, help_text="Observação da assinatura")
 
 ```
@@ -1229,6 +1230,93 @@ LOGOUT_REDIRECT_URL = 'login'
 
 ## Atividade 9 - CRUD Create e Update da Assinatura
 A realizar em 10/05/24
+
+1. Instalar e importar uma lib de renderização de formulários do Django e configuirar para usar Bootstrap
+2. Criar view baseada em classe para criar e atualizar a assinatura (Create / Update)
+3. Criar rotas para as views de criação e atualização de assinatura
+4. Criar templates para criação e atualização de assinatura
+5. Incluir links para as páginas de criação e atualização de assinatura na página "Minha Conta"
+
+### Resumo dos Conceitos Importantes
+- CRUD é um acrônimo para Create, Read, Update e Delete que são as 4 operações básicas de um sistema de gerenciamento de banco de dados. O CRUD é um conceito fundamental para a construção de sistemas web centrado em dados (ou sistemas transacionais) que permitem a criação, leitura, atualização e exclusão desses recursos.
+
+### Instalar a lib django-crispy-forms
+- A lib `django-crispy-forms` é uma lib que permite renderizar formulários do Django de forma mais fácil e flexível. Ela permite a customização dos formulários e a integração com frameworks de CSS como o Bootstrap, Tailwind, entre outros. Para instalar a lib, execute o comando `pip install django-crispy-forms` no terminal
+- Instalar o tema de bootstrap 5 com comando `pip install crispy-bootstrap5`
+- Adicionar a lib e tema no arquivo `settings.py` em `INSTALLED_APPS` e as configurações de template pack
+
+No arquivo `settings.py`
+```python
+INSTALLED_APPS = [
+    ...
+    'crispy_forms',
+    'crispy_bootstrap5',
+]
+
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+```
+
+### Criar Nova Assinatura
+
+- Vamos criar a view protegida, a rota e o template para criação de uma nova assinatura
+- Criar a view baseada em classe `AssinaturaCreate` em `padarias/views.py`
+
+```python
+# adicionar Assinatura nos imports de model no inicio do arquivo
+from .models import Padaria, Cesta, Produto, Assinatura
+from datetime import datetime
+
+class AssinaturaCreateView(generic.CreateView):
+    model = Assinatura
+    fields = ['cesta', 'observacao']
+    template_name = 'padarias/assinatura_form.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.data_inicio = datetime.date.today()
+        return super().form_valid(form)
+```
+
+- A view CreateView do Django já possui um formulário de criação de objetos que é gerado automaticamente a partir do model configurado no atributo `model` e dos campos configurados no atributo `fields`
+- O método `form_valid` é chamado após o envio dos dados com `POST`, ou seja, quando o usuário termina de cadastrar e submete o formulário. Neste caso, a validação do formulário é utilizada para adicionar informações adicionais ao objeto antes de salvar no banco de dados. Aqui estamos adicionando o usuário autenticado e a data de início da assinatura
+
+- Criar a rota para a view de criação de assinatura em `cafecompao/urls.py`
+
+```python
+urlpatterns = [
+    ...
+    path('assinaturas/criar', views.AssinaturaCreateView.as_view(), name='assinaturas_create'), # adicionar essa linha em urlpatterns
+]
+```
+
+- Criar o template `assinatura_form.html` em `templates/padarias` baseado no prototipo `prototipo/assinatura_form.html`
+
+```html
+{% extends 'minha_conta.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block conteudo_logado %}
+<h1>Cadastro de Nova Assinatura</h1>
+
+<form action="{% url 'assinatura_create'  %}" method="POST">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <button type="submit" class="btn btn-primary">Salvar</button>
+</form>
+{% endblock %}
+```
+
+- Alterar o componente de menu da área logada em `templates/components/menu_logado.html` para incluir um link para a página de criação de assinatura
+
+```html
+```
+
+
+
+
 
 ## Atividade 10 - CRUD Delete da Assinatura
 A realizar em 16/05/24
