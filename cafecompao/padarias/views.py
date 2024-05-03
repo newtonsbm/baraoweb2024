@@ -10,6 +10,14 @@ def home(request):
 def about(request):
     qtd_padarias = Padaria.objects.count()
     padarias = Padaria.objects.all()
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        email = request.POST.get('email')
+        mensagem = request.POST.get('mensagem')
+        print("Enviando email-------------------------")
+        print(f"Nome: {nome}, Email: {email}, Mensagem: {mensagem}")
+        print("-----------------------------------------")
+        msg_sucesso = "Mensagem enviada com sucesso!"
     context = {
         'qtd_padarias': qtd_padarias,
         'padarias': padarias
