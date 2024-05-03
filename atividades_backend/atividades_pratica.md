@@ -13,7 +13,8 @@ Prof. Newton Miyoshi - newton.miyoshi@baraodemaua.br
 6. [Atividade 6 - Templates e Componentes](#atividade-6---composição-de-templates-e-componentes): Criar template principal e componentes para cabeçalho e rodapé, compor a página inicial com os componentes criados e a partir do template princinipal
 7. [Atividade 7 - Listagem e Detalhe de Dados](#atividade-7---list-e-detail-das-cestas-com-views-baseada-em-classes): Criar view e template para listar as cestas e produtos cadastrados
 8. [Atividade 8 - Autenticação e Autorização](#atividade-8---autenticação-e-autorização): Configurar autenticação e configurar area logada e página de login
-
+9. [Atividade 9 - Create e Update](#atividade-9---crud-create-e-update-da-assinatura): Criar formularios de cadastro e alteração de assinatura 
+10. [Atividade 10 - Delete](#atividade-10---crud-delete-da-assinatura): Criar a funcionalidade de deletar uma assinatura
 
 
 ## Atividade 1 - Iniciando Projeto Django
@@ -1313,8 +1314,6 @@ urlpatterns = [
 
 ```html
 ```
-
-
 
 
 
