@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block conteudo %}
+
+<div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %})">
+  <hgroup>
+    <h1>Sobre o Café com Pão!</h1>
+    <p>Temos {{ qtd_padarias }} padarias na nossa rede!</p>
+    <br>
+    {% for padaria in padarias %}
+      <p>{{ padaria.nome }} - {{ padaria.endereco.cidade }}</p>
+    {% endfor %}
+  </hgroup>
+</div>
+{% endblock %}
