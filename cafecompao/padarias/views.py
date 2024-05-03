@@ -23,7 +23,7 @@ def about(request):
     context = {
         'qtd_padarias': qtd_padarias,
         'padarias': padarias,
-        'msg_enviada': msg_enviada,
+        'msg_enviada': msg_enviada
     }
     return render(request, 'sobre.html', context) 
 

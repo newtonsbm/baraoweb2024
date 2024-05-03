@@ -677,19 +677,22 @@ def home(request):
 def about(request):
     qtd_padarias = Padaria.objects.count()
     padarias = Padaria.objects.all()
+    msg_enviada = False
     if request.method == 'POST':
         nome = request.POST.get('nome')
         email = request.POST.get('email')
         mensagem = request.POST.get('mensagem')
-        print("Enviando email-------------------------")
+        print("--Enviando email-------------------------")
         print(f"Nome: {nome}, Email: {email}, Mensagem: {mensagem}")
         print("-----------------------------------------")
-        msg_sucesso = "Mensagem enviada com sucesso!"
+        msg_enviada = True 
     context = {
         'qtd_padarias': qtd_padarias,
-        'padarias': padarias
+        'padarias': padarias,
+        'msg_enviada': msg_enviada
     }
     return render(request, 'sobre.html', context) 
+```
 
 - Criar a rota para a view `about` em `cafecompao/urls.py`
 
@@ -705,6 +708,7 @@ urlpatterns = [
 
 ```html
 {% extends 'base.html' %}
+
 {% load static %}
 
 {% block conteudo %}
@@ -727,32 +731,54 @@ urlpatterns = [
 </section>
 
 <section class="container contato">
-  <h2>Fale Conosco!</h2>
+  {% if msg_enviada %}
+    <div class="alert alert-success" role="alert">
+      <i class="bi bi-check-circle"></i>
+      Sua mensagem foi enviada com sucesso! Aguarde nosso retorno por email.
+    </div>
+  {% else %}
+    <h2>Fale Conosco!</h2>
 
-  <form action="{% url 'about' %}" method="post">
-    <input type="hidden" name="csrfmiddlewaretoken"
-      value="WNXHj9DAM9LqCq0dHdXco3zs2eYM1k5PkC5ORnZi55yzDAiHhCN6NpfrF9BfKiVS">
-    <div class="mb-3">
-      <label for="email" class="form-label">Seu e-mail</label>
-      <input type="email" class="form-control" id="email" name="email" required >
-    </div>
-    <div class="mb-3">
-      <label for="nome" class="form-label">Seu nome</label>
-      <input type="text" class="form-control" id="nome" name="nome" required>
-    </div>
-    <div class="mb-3">
-      <label for="mensagem" class="form-label">Mensagem:</label>
-      <textarea class="form-control" id="mensagem" name="mensagem" rows="6" required></textarea>
-    </div>
-    <button class="btn btn-primary btn-lg" type="submit">Enviar</button>
-  </form>
-
+    <form action="{% url 'about' %}" method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="email" class="form-label">Seu e-mail</label>
+        <input type="email" class="form-control" id="email" name="email" required >
+      </div>
+      <div class="mb-3">
+        <label for="nome" class="form-label">Seu nome</label>
+        <input type="text" class="form-control" id="nome" name="nome" required>
+      </div>
+      <div class="mb-3">
+        <label for="mensagem" class="form-label">Mensagem:</label>
+        <textarea class="form-control" id="mensagem" name="mensagem" rows="6" required></textarea>
+      </div>
+      <button class="btn btn-primary btn-lg" type="submit">Enviar</button>
+    </form>
+  {% endif %}
 </section>
 {% endblock %}
 ```
 
 - Alterar o menu principal em `templates/components/header.html` para incluir um link para a página de listagem de cestas
 
+```html
+<header>
+  <nav>
+    <span class="logo">
+      Café com Pão
+      <i class="bi bi-cup-hot"></i>
+    </span>
+    <ul>
+      <li><a href="{% url 'home' %}">Principal</a></li>
+      <li><a href="">Padarias</a></li>
+      <li><a href="">Cestas</a></li>
+      <li><a href="{% url 'about' %}">Sobre</a></li>
+    </ul>
+    <a href="" class="btn btn-primary">Entrar</a>
+  </nav>
+</header>
+```
 
 ### Atividade na Aula
 
