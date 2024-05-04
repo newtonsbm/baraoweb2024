@@ -55,7 +55,6 @@ class CestasList(generic.ListView):
     model = Cesta
     template_name = 'padarias/cestas_list.html'
     context_object_name = 'cestas'
-    paginate_by = 5
 
 def cestas_detail(request, pk):
     """

@@ -11,7 +11,7 @@
 </div>
 
 <section class="container card-container">
-  {% for cesta in cesta_list %}
+  {% for cesta in cestas %}
     <a href="{% url 'cestas_detail' cesta.id %}" class="card">
       <img src="{{ cesta.imagem.url }}" alt="cesta">
       <div class="card-detail">

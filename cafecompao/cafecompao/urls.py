@@ -23,7 +23,7 @@ from padarias import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('django.contrib.auth.urls')),
-    path('', views.home, name='home', name='home'),
+    path('', views.home, name='home'),
     path('sobre', views.about, name='about'),
     path('cestas', views.CestasList.as_view(), name='cestas_list'),
     path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),  
