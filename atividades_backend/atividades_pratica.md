@@ -1413,6 +1413,10 @@ urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 </nav>
 ```
 
+- A estrutura de pastas `templates` após a criação dos templates de criação e atualização de assinatura ficará a seguinte:
+
+![Estrutura de Pastas com CRUD Assinatura](folder7.png)]
+
 ### Atividade na Aula
 - Reproduzir os passos acima
 - Enviar para o github com mensagem de commit 'Atividade 9 - CRUD Create e Update da Assinatura'
