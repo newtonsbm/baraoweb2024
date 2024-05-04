@@ -81,4 +81,3 @@ class PadariasList(generic.ListView):
     model = Padaria
     template_name = 'padarias/padarias_list.html'
     context_object_name = 'padarias'
-
