@@ -36,6 +36,10 @@ def contact(request):
     return HttpResponse('Entre em contato')
 
 def cestas_list(request):
+    """
+    Função que retorna a lista de cestas
+    equivalente a classe CestasList
+    """
     cestas = Cesta.objects.all()
     context = {
         'cestas': cestas
@@ -49,6 +53,10 @@ class CestasList(generic.ListView):
     paginate_by = 5
 
 def cestas_detail(request, pk):
+    """
+    Função que retorna o detalhe de uma cesta
+    equivalente a classe CestasDetail
+    """
     cesta = get_object_or_404(Cesta, pk=pk)
     context = {
         'cesta': cesta
@@ -59,3 +67,4 @@ class CestasDetail(generic.DetailView):
     model = Cesta
     template_name = 'padarias/cestas_detail.html'
     context_object_name = 'cesta'
+
