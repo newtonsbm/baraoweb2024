@@ -1,8 +1,11 @@
+import datetime
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
+from django.urls import reverse_lazy
 from django.views import generic
 from django.contrib.auth.decorators import login_required 
-from .models import Padaria, Produto, Cesta, Email
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import Padaria, Produto, Cesta, Email, Assinatura
 
 def home(request): 
     qtd_padarias = Padaria.objects.count()
@@ -81,3 +84,19 @@ class PadariasList(generic.ListView):
     model = Padaria
     template_name = 'padarias/padarias_list.html'
     context_object_name = 'padarias'
+
+class AssinaturaCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Assinatura
+    fields = ['cesta', 'observacao']
+    template_name = 'padarias/assinatura_form.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.data_inicio = datetime.date.today()
+        return super().form_valid(form)
+
+class AssinaturaUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Assinatura
+    fields = ['cesta', 'observacao']
+    template_name = 'padarias/assinatura_form_update.html'
+    success_url = reverse_lazy('minha_conta')

@@ -42,6 +42,8 @@ class Cesta(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nome = models.CharField(
         verbose_name="Nome", max_length=100, unique=True, null=False, blank=False, help_text="Nome da cesta")
+    descricao = models.TextField(
+        verbose_name="Descrição", null=True, blank=True, help_text="Descrição da cesta")
     preco = models.DecimalField(
         verbose_name="Preço", max_digits=10, decimal_places=2, null=False, blank=False, help_text="Preço da cesta")
     produtos = models.ManyToManyField(
@@ -108,7 +110,6 @@ class Assinatura(models.Model):
     cesta = models.OneToOneField(
         Cesta, on_delete=models.CASCADE, verbose_name="Cesta", null=False, help_text="Cesta da assinatura", related_name="assinatura")
     data_inicio = models.DateField("Data de início", null=False, blank=False, help_text="Data de início da assinatura")
-    data_fim = models.DateField("Data de término", null=False, blank=False, help_text="Data de término da assinatura")
     observacao = models.TextField("Observação", null=True, blank=True, help_text="Observação da assinatura")
 
     def __str__(self):

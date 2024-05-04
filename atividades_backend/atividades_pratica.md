@@ -995,7 +995,6 @@ class Assinatura(models.Model):
     cesta = models.OneToOneField(
         Cesta, on_delete=models.CASCADE, verbose_name="Cesta", null=False, help_text="Cesta da assinatura", related_name="assinatura")
     data_inicio = models.DateField("Data de início", null=False, blank=False, help_text="Data de início da assinatura")
-    data_fim = models.DateField("Data de término", null=False, blank=False, help_text="Data de término da assinatura")
     observacao = models.TextField("Observação", null=True, blank=True, help_text="Observação da assinatura")
 
 ```
@@ -1265,11 +1264,12 @@ CRISPY_TEMPLATE_PACK = "bootstrap5"
 - Criar a view baseada em classe `AssinaturaCreate` em `padarias/views.py`
 
 ```python
-# adicionar Assinatura nos imports de model no inicio do arquivo
+# adicionar no inicio do arquivo
+import datetime
 from .models import Padaria, Cesta, Produto, Assinatura
-from datetime import datetime
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-class AssinaturaCreateView(generic.CreateView):
+class AssinaturaCreateView(LoginRequiredMixin, generic.CreateView):
     model = Assinatura
     fields = ['cesta', 'observacao']
     template_name = 'padarias/assinatura_form.html'
@@ -1282,6 +1282,7 @@ class AssinaturaCreateView(generic.CreateView):
 
 - A view CreateView do Django já possui um formulário de criação de objetos que é gerado automaticamente a partir do model configurado no atributo `model` e dos campos configurados no atributo `fields`
 - O método `form_valid` é chamado após o envio dos dados com `POST`, ou seja, quando o usuário termina de cadastrar e submete o formulário. Neste caso, a validação do formulário é utilizada para adicionar informações adicionais ao objeto antes de salvar no banco de dados. Aqui estamos adicionando o usuário autenticado e a data de início da assinatura
+- O mixin `LoginRequiredMixin` é um mixin do Django que protege a view e só permite o acesso a usuários autenticados. Caso o usuário não esteja autenticado, ele é redirecionado para a página de login
 
 - Criar a rota para a view de criação de assinatura em `cafecompao/urls.py`
 
@@ -1292,14 +1293,17 @@ urlpatterns = [
 ]
 ```
 
-- Criar o template `assinatura_form.html` em `templates/padarias` baseado no prototipo `prototipo/assinatura_form.html`
+- Criar o template `assinatura_form.html` em `templates/padarias` 
+- Esse template herda do template `base_logada` e inclui o formulário 
+- Esse form esta vindo da view `AssinaturaCreateView` que já tem o model `Assinatura` e os campos `cesta` e `observacao` configurados
+
 
 ```html
-{% extends 'minha_conta.html' %}
+{% extends 'base_logada.html' %}
 
 {% load crispy_forms_tags %}
 
-{% block conteudo_logado %}
+{% block area_logada %}
 <h1>Cadastro de Nova Assinatura</h1>
 
 <form action="{% url 'assinatura_create'  %}" method="POST">
@@ -1311,11 +1315,107 @@ urlpatterns = [
 ```
 
 - Alterar o componente de menu da área logada em `templates/components/menu_logado.html` para incluir um link para a página de criação de assinatura
-
+- Mostrando somente a parte a ser alterada
 ```html
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'assinaturas_create' %}">
+      <i class="bi bi-basket3-fill"></i> Nova Assinatura
+    </a>
+  </li>
 ```
 
+### Alterar Assinatura
 
+- Agora vamos criar a view protegida, a rota e o template para atualização de uma assinatura existente 
+- Vamos alterar o `menu_logado.html` para incluir o link para a página de atualização de assinatura caso o usuário já tenha uma assinatura ou então continuar apresentando o link para a página de criação de assinatura
+- Criar a view baseada em classe `AssinaturaUpdate` em `padarias/views.py`
+
+```python
+# adicionar esse import no inicio do arquivo
+from django.urls import reverse_lazy
+
+class AssinaturaUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Assinatura
+    fields = ['cesta', 'observacao']
+    template_name = 'padarias/assinatura_form_edit.html'
+    success_url = reverse_lazy('minha_conta')
+```
+
+- O campo `success_url` é utilizado para redirecionar o usuário para uma página específica após a atualização do objeto. Neste caso, estamos redirecionando o usuário para a página de "Minha Conta" após
+- A função `reverse_lazy` é uma função do Django que permite a criação de URLs de forma dinâmica. Neste caso, estamos criando a URL de redirecionamento para a página de "Minha Conta" após a atualização da assinatura. Funciona da mesma forma que a função `url` nos templates.
+- Criar a rota para a view de atualização de assinatura em `cafecompao/urls.py`
+
+```python
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('auth/', include('django.contrib.auth.urls')),
+    path('', views.home, name='home'),
+    path('sobre', views.about, name='about'),
+    path('cestas', views.CestasList.as_view(), name='cestas_list'),
+    path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),  
+    path('padarias/', views.PadariasList.as_view(), name='padarias_list'),  
+    path('minha_conta', views.minha_conta, name='minha_conta'), 
+    path('assinaturas/criar', views.AssinaturaCreateView.as_view(), name='assinatura_create'),
+    path('assinaturas/<pk>/editar', views.AssinaturaUpdate.as_view(), name='assinatura_update'), # nova linha
+] 
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
+
+- Criar o template `assinatura_form_update.html` em `templates/padarias` com o código muito parecido com o form de criação
+
+```html
+{% extends 'base_logada.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block area_logada %}
+<h1>Alterar Assinatura</h1>
+
+<form action="{% url 'assinatura_update' user.assinatura.id  %}" method="POST">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <button type="submit" class="btn btn-primary">Alterar Assinatura</button>
+</form>
+{% endblock %}
+```
+
+- Alterar o componente de menu da área logada em `templates/components/menu_logado.html` para incluir um link para a página de atualização de assinatura caso o usuário já tenha uma assinatura ou então continuar apresentando o link para a página de criação de assinatura
+
+```html
+<nav>
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'minha_conta' %}">
+        <i class="bi bi-house"></i> Minha Conta
+      </a>
+    </li>
+    <li class="nav-item">
+      {% if user.assinatura %}
+        <a class="nav-link" href="{% url 'assinatura_update' user.assinatura.id %}">
+          <i class="bi bi-basket3-fill"></i> Alterar Assinatura
+        </a>
+      {% else %}
+        <a class="nav-link" href="{% url 'assinatura_create' %}">
+          <i class="bi bi-basket3-fill"></i> Nova Assinatura
+        </a>
+      {% endif %}
+    </li>
+    <li class="nav-item">
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="nav-link">
+          <i class="bi bi-door-closed"></i> Sair
+        </button>
+      </form>
+    </li>
+  </ul>
+</nav>
+```
+
+### Atividade na Aula
+- Reproduzir os passos acima
+- Enviar para o github com mensagem de commit 'Atividade 9 - CRUD Create e Update da Assinatura'
 
 ## Atividade 10 - CRUD Delete da Assinatura
 A realizar em 16/05/24

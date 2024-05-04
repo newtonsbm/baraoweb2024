@@ -1,0 +1,13 @@
+{% extends 'base_logada.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block area_logada %}
+<h1>Cadastro de Nova Assinatura</h1>
+
+<form action="{% url 'assinatura_create'  %}" method="POST">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <button type="submit" class="btn btn-primary">Salvar</button>
+</form>
+{% endblock %}

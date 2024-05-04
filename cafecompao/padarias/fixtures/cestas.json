@@ -1,7 +1,6 @@
 [
     {
         "model": "padarias.cesta",
-        "pk": 1,
         "fields": {
             "nome": "Cesta Matinal Simples",
             "descricao": "Cesta matinal com produtos essenciais.",
@@ -13,7 +12,6 @@
     },
     {
         "model": "padarias.cesta",
-        "pk": 2,
         "fields": {
             "nome": "Cesta Dia a dia",
             "descricao": "Cesta média com uma variedade de produtos.",
@@ -25,7 +23,6 @@
     },
     {
         "model": "padarias.cesta",
-        "pk": 3,
         "fields": {
             "nome": "Cesta Premium Gourmet",
             "descricao": "Cesta premium com produtos de alta qualidade.",
