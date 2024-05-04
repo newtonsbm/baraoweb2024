@@ -24,6 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
     path('sobre', views.about, name='about'),
+    path('cestas', views.CestasList.as_view(), name='cestas_list'),
+    path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),  # adicionar essa linha
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

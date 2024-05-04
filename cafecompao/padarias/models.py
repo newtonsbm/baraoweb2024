@@ -89,3 +89,14 @@ class Endereco(models.Model):
 
     def __str__(self):
         return f"{self.rua}, {self.numero} - {self.cidade}/{self.estado}"
+
+class Email(models.Model):
+    nome = models.CharField(
+        verbose_name="Nome", max_length=100, null=False, blank=False, help_text="Nome do remetente")
+    email = models.EmailField(
+        verbose_name="Email", null=False, blank=False, help_text="Email do remetente")
+    mensagem = models.TextField(
+        verbose_name="Mensagem", null=False, blank=False, help_text="Mensagem do email")
+
+    def __str__(self):
+        return f"{self.nome} - {self.email}"
