@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block conteudo %}
+<div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %})">
+  <hgroup>
+    <h1>Sobre o Café com Pão!</h1>
+    <p>Temos {{ qtd_padarias }} padarias na nossa rede!</p>
+  </hgroup>
+</div>
+
+<section class="social-container">
+  <div class="container">
+    <h2>Nossa Rede</h2>
+    <p>
+      {% for padaria in padarias %}
+        {{ padaria.nome }} em {{ padaria.endereco.bairro }} / {{ padaria.endereco.cidade }}<br>
+      {% endfor %}
+    </p>
+  </div>
+</section>
+
+<section class="container contato">
+  {% if msg_enviada %}
+    <div class="alert alert-success" role="alert">
+      <i class="bi bi-check-circle"></i>
+      Sua mensagem foi enviada com sucesso! Aguarde nosso retorno por email.
+    </div>
+  {% else %}
+    <h2>Fale Conosco!</h2>
+
+    <form action="{% url 'about' %}" method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="email" class="form-label">Seu e-mail</label>
+        <input type="email" class="form-control" id="email" name="email" required >
+      </div>
+      <div class="mb-3">
+        <label for="nome" class="form-label">Seu nome</label>
+        <input type="text" class="form-control" id="nome" name="nome" required>
+      </div>
+      <div class="mb-3">
+        <label for="mensagem" class="form-label">Mensagem:</label>
+        <textarea class="form-control" id="mensagem" name="mensagem" rows="6" required></textarea>
+      </div>
+      <button class="btn btn-primary btn-lg" type="submit">Enviar</button>
+    </form>
+  {% endif %}
+</section>
+{% endblock %}
