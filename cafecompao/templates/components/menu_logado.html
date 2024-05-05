@@ -8,7 +8,10 @@
     <li class="nav-item">
       {% if user.assinatura %}
         <a class="nav-link" href="{% url 'assinatura_update' user.assinatura.id %}">
-          <i class="bi bi-basket3-fill"></i> Alterar Assinatura
+          <i class="bi bi-pen"></i> Alterar Assinatura
+        </a>
+        <a class="nav-link" href="{% url 'assinatura_delete' user.assinatura.id %}">
+          <i class="bi bi-trash"fill></i> Cancelar Assinatura
         </a>
       {% else %}
         <a class="nav-link" href="{% url 'assinatura_create' %}">

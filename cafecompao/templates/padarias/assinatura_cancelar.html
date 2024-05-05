@@ -1,0 +1,30 @@
+{% extends 'base_logada.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block area_logada %}
+  <h1>Cancelar Assinatura</h1>
+  <br>
+  <h2>Assinatura Atual</h2>
+  <ul>
+    <li><b>Cesta:</b> {{user.assinatura.cesta}} </li>
+    <li><b>Valor:</b> {{user.assinatura.cesta.preco }}</li>
+    <li><b>Data de início:</b> {{user.assinatura.data_inicio }} </li>
+  </ul>
+  <br>
+  <h3> Ops! 😅 </h3>
+  <p>
+  Tem certeza de que quer dar tchau para as delícias matinais do Café com Pão? 
+  </p>
+  <p>
+  Se mudar de ideia, estamos aqui para te receber de volta com pães quentinhos e cafés especiais. 🥐
+  </p>
+  <br>
+  <form action="{% url 'assinatura_delete' user.assinatura.id %}" method="post">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <a href="{% url 'minha_conta' %}" class="btn btn-primary btn-lg">Continuar recebendo cestas incríveis!</a>
+    <button type="submit" class="btn btn-secondary">Infelizmente quero cancelar</button>
+  </form>
+{% endblock %}

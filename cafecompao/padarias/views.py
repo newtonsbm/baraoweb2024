@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.urls import reverse_lazy
 from django.views import generic
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Padaria, Produto, Cesta, Email, Assinatura
@@ -89,10 +90,12 @@ class AssinaturaCreateView(LoginRequiredMixin, generic.CreateView):
     model = Assinatura
     fields = ['cesta', 'observacao']
     template_name = 'padarias/assinatura_form.html'
+    success_url = reverse_lazy('minha_conta')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.data_inicio = datetime.date.today()
+        messages.success(message="Assinatura realizada com sucesso!", request=self.request)
         return super().form_valid(form)
 
 class AssinaturaUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -100,3 +103,17 @@ class AssinaturaUpdateView(LoginRequiredMixin, generic.UpdateView):
     fields = ['cesta', 'observacao']
     template_name = 'padarias/assinatura_form_update.html'
     success_url = reverse_lazy('minha_conta')
+
+    def form_valid(self, form):
+        messages.success(message="Assinatura alterada com sucesso!", request=self.request)
+        return super().form_valid(form)
+
+class AssinaturaDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Assinatura
+    template_name = 'padarias/assinatura_cancelar.html'
+    context_object_name = 'assinatura'
+    success_url = reverse_lazy('minha_conta')
+
+    def form_valid(self, form):
+        messages.success(message="Assinatura cancelada com sucesso!", request=self.request)
+        return super().form_valid(form)

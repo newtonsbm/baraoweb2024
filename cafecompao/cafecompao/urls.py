@@ -30,7 +30,9 @@ urlpatterns = [
     path('padarias/', views.PadariasList.as_view(), name='padarias_list'),  
     path('minha_conta', views.minha_conta, name='minha_conta'), 
     path('assinaturas/criar', views.AssinaturaCreateView.as_view(), name='assinatura_create'),
-    path('assinaturas/<pk>/editar', views.AssinaturaUpdateView.as_view(), name='assinatura_update'), # nova linha
+    path('assinaturas/<pk>/editar', views.AssinaturaUpdateView.as_view(), name='assinatura_update'), 
+    path('assinaturas/<pk>/cancelar', views.AssinaturaDeleteView.as_view(), name='assinatura_delete'), # nova linha
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
