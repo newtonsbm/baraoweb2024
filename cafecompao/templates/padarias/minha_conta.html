@@ -1,0 +1,20 @@
+{% extends 'base_logada.html' %}
+{% block area_logada %}
+  <h1>Minha Conta</h1>
+  <h2>Informações Pessoais</h2>
+  <br>
+  <ul>
+    <li><b>Nome: </b>{{ user.first_name }} {{ user.last_name }} </li>
+    <li><b>Nome de usuário: </b>{{user.username}}</li>
+    <li><b>E-mail:</b> {{ user.email }} </li>
+  </ul>
+  <h2>Assinatura Atual:</h2>
+  {% if user.assinatura %}
+    <ul>
+      <li><b>Cesta: </b>{{ user.assinatura.cesta }}</li>
+      <li><b>Data de início: </b>{{ user.assinatura.data_inicio | date:"r" }}</li>
+    </ul>
+  {% else %}
+    <p>Você ainda não possui uma assinatura de cesta de café da manhã.</p>
+  {% endif %}
+{% endblock %}

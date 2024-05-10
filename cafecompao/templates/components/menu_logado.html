@@ -1,0 +1,22 @@
+<nav>
+  <ul class="nav flex-column">
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'minha_conta' %}">
+        <i class="bi bi-house"></i> Minha Conta
+      </a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="">
+        <i class="bi bi-basket3-fill"></i> Nova Assinatura
+      </a>
+    </li>
+    <li class="nav-item">
+      <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="nav-link">
+          <i class="bi bi-door-closed"></i> Sair
+        </button>
+      </form>
+    </li>
+  </ul>
+</nav>

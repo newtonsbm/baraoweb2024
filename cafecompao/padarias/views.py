@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views import generic
@@ -68,3 +69,6 @@ class CestasDetail(generic.DetailView):
     template_name = 'padarias/cestas_detail.html'
     context_object_name = 'cesta'
 
+@login_required
+def minha_conta(request):
+    return render(request, 'padarias/minha_conta.html')

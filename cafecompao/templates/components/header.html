@@ -10,6 +10,10 @@
       <li><a href="{% url 'cestas_list' %}">Cestas</a></li>
       <li><a href="{% url 'about' %}">Sobre</a></li>
     </ul>
-    <a href="" class="btn btn-primary">Entrar</a>
+    {% if user.is_authenticated %}
+      <a href="{% url 'minha_conta' %}" class="btn btn-primary">Minha Conta</a>
+    {% else %}
+      <a href="{% url 'login' %}" class="btn btn-primary">Entrar</a>
+    {% endif %}
   </nav>
 </header>
