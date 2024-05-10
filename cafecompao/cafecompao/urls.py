@@ -28,6 +28,7 @@ urlpatterns = [
     path('cestas', views.CestasList.as_view(), name='cestas_list'),
     path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),
     path('minha_conta', views.minha_conta, name='minha_conta'),
+    path('nova_conta', views.nova_conta, name='nova_conta'),
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

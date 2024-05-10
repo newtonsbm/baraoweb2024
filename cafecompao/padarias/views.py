@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views import generic
+from django.contrib.auth.models import User
+from django.contrib.auth import login
 
 from .models import Padaria, Email, Cesta
 
@@ -69,6 +71,38 @@ class CestasDetail(generic.DetailView):
     template_name = 'padarias/cestas_detail.html'
     context_object_name = 'cesta'
 
-@login_required
+@login_required(login_url='/auth/login/')
 def minha_conta(request):
     return render(request, 'padarias/minha_conta.html')
+
+def nova_conta(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        nome = request.POST.get('nome')
+        first_name = nome.split(' ')[0]
+        last_name = nome.split(' ')[-1]
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+        # validacao
+        erro = None 
+        if password != password2:
+            erro = 'Senhas não coincidem.'
+        if User.objects.filter(username=username).exists():
+            erro = 'Nome de usuário já existente.'
+        if User.objects.filter(email=email).exists():
+            erro = 'Email já cadastrado.'
+        if erro:
+            return render(request, 'registration/nova_conta.html', {'erro': erro})
+        # Criar usuário e logar e redirecionar para minha conta
+        try:
+            user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
+            login(request, user)
+            return redirect('minha_conta')
+        except Exception as e:
+            erro = str(e)
+            print(erro)
+            return render(request, 'registration/nova_conta.html', {'erro': erro})
+    return render(request, 'registration/nova_conta.html')
+
+        
