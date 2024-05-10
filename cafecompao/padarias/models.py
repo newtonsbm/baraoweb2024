@@ -44,6 +44,8 @@ class Cesta(models.Model):
         verbose_name="Nome", max_length=100, unique=True, null=False, blank=False, help_text="Nome da cesta")
     preco = models.DecimalField(
         verbose_name="Preço", max_digits=10, decimal_places=2, null=False, blank=False, help_text="Preço da cesta")
+    descricao = models.TextField(
+        verbose_name="Descrição", null=True, blank=True, help_text="Descrição da cesta")
     produtos = models.ManyToManyField(
         Produto, verbose_name="Produtos", help_text="Produtos da cesta", related_name="cestas")
     nivel = models.CharField(
