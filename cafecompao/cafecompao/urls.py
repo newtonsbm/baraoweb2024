@@ -29,6 +29,9 @@ urlpatterns = [
     path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),
     path('minha_conta', views.minha_conta, name='minha_conta'),
     path('nova_conta', views.nova_conta, name='nova_conta'),
+    # ATIVIDADE 9 e 10
+    path('assinaturas/criar', views.AssinaturaCreateView.as_view(), name='assinatura_create'),
+    path('assinaturas/<pk>/editar', views.AssinaturaUpdateView.as_view(), name='assinatura_update'), 
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

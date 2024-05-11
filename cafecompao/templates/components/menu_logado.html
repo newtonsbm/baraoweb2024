@@ -6,9 +6,15 @@
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="">
-        <i class="bi bi-basket3-fill"></i> Nova Assinatura
-      </a>
+      {% if user.assinatura %}
+        <a class="nav-link" href="{% url 'assinatura_update' user.assinatura.id %}">
+          <i class="bi bi-basket3-fill"></i> Alterar Assinatura
+        </a>
+      {% else %}
+        <a class="nav-link" href="{% url 'assinatura_create' %}">
+          <i class="bi bi-basket3-fill"></i> Nova Assinatura
+        </a>
+      {% endif %}
     </li>
     <li class="nav-item">
       <form method="post" action="{% url 'logout' %}">

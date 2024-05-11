@@ -1,12 +1,15 @@
+import datetime
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.views import generic
 from django.contrib.auth.models import User
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login
+from django.urls import reverse_lazy
 
-from .models import Padaria, Email, Cesta
+from .models import Padaria, Email, Cesta, Assinatura
 
 # Create your views here.
 
@@ -75,15 +78,18 @@ class CestasDetail(generic.DetailView):
 def minha_conta(request):
     return render(request, 'padarias/minha_conta.html')
 
+# ATIVIDADE 9 e 10
+
 def nova_conta(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
         nome = request.POST.get('nome')
         first_name = nome.split(' ')[0]
-        last_name = nome.split(' ')[-1]
+        last_name = ' '.join(nome.split(' ')[1:])
         password = request.POST.get('password')
         password2 = request.POST.get('password2')
+
         # validacao
         erro = None 
         if password != password2:
@@ -94,6 +100,7 @@ def nova_conta(request):
             erro = 'Email já cadastrado.'
         if erro:
             return render(request, 'registration/nova_conta.html', {'erro': erro})
+
         # Criar usuário e logar e redirecionar para minha conta
         try:
             user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
@@ -105,4 +112,19 @@ def nova_conta(request):
             return render(request, 'registration/nova_conta.html', {'erro': erro})
     return render(request, 'registration/nova_conta.html')
 
-        
+class AssinaturaCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Assinatura
+    fields = ['cesta', 'observacao']
+    template_name = 'padarias/assinatura_form.html'
+    success_url = reverse_lazy('minha_conta')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.data_inicio = datetime.date.today()
+        return super().form_valid(form)
+ 
+class AssinaturaUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Assinatura
+    fields = ['cesta', 'observacao']
+    template_name = 'padarias/assinatura_form_update.html'
+    success_url = reverse_lazy('minha_conta')
