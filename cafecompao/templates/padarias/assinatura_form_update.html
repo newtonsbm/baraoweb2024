@@ -1,0 +1,13 @@
+{% extends 'base_logada.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block area_logada %}
+<h1>Alterar Assinatura</h1>
+
+<form action="{% url 'assinatura_update' user.assinatura.id  %}" method="POST">
+    {% csrf_token %}
+    {{ form | crispy }}
+    <button type="submit" class="btn btn-primary">Alterar Assinatura</button>
+</form>
+{% endblock %}
