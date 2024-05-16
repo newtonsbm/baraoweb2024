@@ -1273,6 +1273,7 @@ class AssinaturaCreateView(LoginRequiredMixin, generic.CreateView):
     model = Assinatura
     fields = ['cesta', 'observacao']
     template_name = 'padarias/assinatura_form.html'
+    success_url = reverse_lazy('minha_conta')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -1289,7 +1290,7 @@ class AssinaturaCreateView(LoginRequiredMixin, generic.CreateView):
 ```python
 urlpatterns = [
     ...
-    path('assinaturas/criar', views.AssinaturaCreateView.as_view(), name='assinaturas_create'), # adicionar essa linha em urlpatterns
+    path('assinaturas/criar', views.AssinaturaCreateView.as_view(), name='assinatura_create'), # adicionar essa linha em urlpatterns
 ]
 ```
 
@@ -1337,7 +1338,7 @@ from django.urls import reverse_lazy
 class AssinaturaUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = Assinatura
     fields = ['cesta', 'observacao']
-    template_name = 'padarias/assinatura_form_edit.html'
+    template_name = 'padarias/assinatura_form_update.html'
     success_url = reverse_lazy('minha_conta')
 ```
 
@@ -1356,7 +1357,7 @@ urlpatterns = [
     path('padarias/', views.PadariasList.as_view(), name='padarias_list'),  
     path('minha_conta', views.minha_conta, name='minha_conta'), 
     path('assinaturas/criar', views.AssinaturaCreateView.as_view(), name='assinatura_create'),
-    path('assinaturas/<pk>/editar', views.AssinaturaUpdate.as_view(), name='assinatura_update'), # nova linha
+    path('assinaturas/<pk>/editar', views.AssinaturaUpdateView.as_view(), name='assinatura_update'), # nova linha
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

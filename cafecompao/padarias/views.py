@@ -1,14 +1,19 @@
 import datetime
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.urls import reverse_lazy
+from django.shortcuts import redirect
 from django.views import generic
+from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required 
-from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Padaria, Produto, Cesta, Email, Assinatura
+from django.contrib.auth import login
 
-def home(request): 
+from .models import Padaria, Email, Cesta, Assinatura, Produto
+
+
+def home(request):
     qtd_padarias = Padaria.objects.count()
     qtd_produtos = Produto.objects.count()
     qtd_cestas = Cesta.objects.count()
@@ -117,3 +122,39 @@ class AssinaturaDeleteView(LoginRequiredMixin, generic.DeleteView):
     def form_valid(self, form):
         messages.success(message="Assinatura cancelada com sucesso!", request=self.request)
         return super().form_valid(form)
+
+
+# ATIVIDADE 9 e 10
+
+def nova_conta(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        nome = request.POST.get('nome')
+        first_name = nome.split(' ')[0]
+        last_name = ' '.join(nome.split(' ')[1:])
+        password = request.POST.get('password')
+        password2 = request.POST.get('password2')
+
+        # validacao
+        erro = None
+        if password != password2:
+            erro = 'Senhas não coincidem.'
+        if User.objects.filter(username=username).exists():
+            erro = 'Nome de usuário já existente.'
+        if User.objects.filter(email=email).exists():
+            erro = 'Email já cadastrado.'
+        if erro:
+            return render(request, 'registration/nova_conta.html', {'erro': erro})
+
+        # Criar usuário e logar e redirecionar para minha conta
+        try:
+            user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
+            login(request, user)
+            messages.success(request, 'Conta criada com sucesso!')
+            return redirect('minha_conta')
+        except Exception as e:
+            erro = str(e)
+            print(erro)
+            return render(request, 'registration/nova_conta.html', {'erro': erro})
+    return render(request, 'registration/nova_conta.html')

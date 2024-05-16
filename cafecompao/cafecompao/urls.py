@@ -25,10 +25,12 @@ urlpatterns = [
     path('auth/', include('django.contrib.auth.urls')),
     path('', views.home, name='home'),
     path('sobre', views.about, name='about'),
+    path('padarias', views.PadariasList.as_view(), name='padarias_list'),
     path('cestas', views.CestasList.as_view(), name='cestas_list'),
-    path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),  
-    path('padarias/', views.PadariasList.as_view(), name='padarias_list'),  
-    path('minha_conta', views.minha_conta, name='minha_conta'), 
+    path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),
+    path('minha_conta', views.minha_conta, name='minha_conta'),
+    path('nova_conta', views.nova_conta, name='nova_conta'),
+    # ATIVIDADE 9 e 10
     path('assinaturas/criar', views.AssinaturaCreateView.as_view(), name='assinatura_create'),
     path('assinaturas/<pk>/editar', views.AssinaturaUpdateView.as_view(), name='assinatura_update'), 
     path('assinaturas/<pk>/cancelar', views.AssinaturaDeleteView.as_view(), name='assinatura_delete'), # nova linha

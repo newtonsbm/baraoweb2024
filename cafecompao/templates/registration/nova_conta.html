@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block conteudo %}
+<div class="container login">
+  <h1>Crie sua conta</h1>
+  {% if erro %}
+    <div class="alert alert-danger" role="alert">
+      {{ erro }}
+    </div>
+  {% endif %}
+  <form action="{% url 'nova_conta' %}" method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="nome" class="form-label">Seu nome</label>
+      <input type="text" class="form-control" id="nome" name="nome" required>
+    </div>
+    <div class="mb-3">
+      <label for="email" class="form-label">Seu e-mail</label>
+      <input type="email" class="form-control" id="email" name="email" required>
+    </div>
+    <div class="mb-3">
+      <label for="username" class="form-label">Nome de Usuário</label>
+      <input type="text" class="form-control" id="username" name="username" required>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Senha</label>
+      <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Repetir senha</label>
+      <input type="password" class="form-control" id="password2" name="password2" required>
+    </div>
+    <button class="btn btn-primary btn-lg" type="submit">Criar</button>
+    <a class="btn btn-secondary" href="{% url 'login' %}">Voltar</a>
+  </form>
+</div>
+{% endblock %}
