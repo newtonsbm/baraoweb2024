@@ -1,4 +1,4 @@
-import uuid # colocar essa linha no inicio do arquivo
+import uuid
 from django.db import models
 
 # Create your models here.
@@ -42,6 +42,8 @@ class Cesta(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nome = models.CharField(
         verbose_name="Nome", max_length=100, unique=True, null=False, blank=False, help_text="Nome da cesta")
+    descricao = models.TextField(
+        verbose_name="Descrição", null=True, blank=True, help_text="Descrição da cesta")
     preco = models.DecimalField(
         verbose_name="Preço", max_digits=10, decimal_places=2, null=False, blank=False, help_text="Preço da cesta")
     descricao = models.TextField(
@@ -56,7 +58,11 @@ class Cesta(models.Model):
     def __str__(self):
         return self.nome
 
+
 class Padaria(models.Model):
+    """
+    Modelo que representa uma padaria
+    """
     nome = models.CharField(
         verbose_name="Nome", max_length=100, unique=True, null=False, blank=False, help_text="Nome da padaria")
     descricao = models.TextField(
@@ -67,7 +73,7 @@ class Padaria(models.Model):
         verbose_name="Imagem", upload_to="padarias", null=True, blank=True, help_text="Imagem da padaria")
 
     def __str__(self):
-        return self.nome
+        return f"{self.nome}"
 
 
 class Endereco(models.Model):
@@ -111,3 +117,6 @@ class Assinatura(models.Model):
         Cesta, on_delete=models.CASCADE, verbose_name="Cesta", null=False, help_text="Cesta da assinatura", related_name="assinatura")
     data_inicio = models.DateField("Data de início", null=False, blank=False, help_text="Data de início da assinatura")
     observacao = models.TextField("Observação", null=True, blank=True, help_text="Observação da assinatura")
+
+    def __str__(self):
+        return f"{self.user} - {self.cesta}"

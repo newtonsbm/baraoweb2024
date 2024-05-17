@@ -1,19 +1,23 @@
 {% extends 'base.html' %}
+
 {% load static %}
 
-{% block conteudo %}
+{% block conteudo%}
 
-<div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %})">
+<div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %}">
   <hgroup>
     <h1>Assine sua manhã perfeita!</h1>
     <p>
       Comece suas manhãs com sabor e praticidade Assine o Café com Pão!
     </p>
+    <p>
+      São {{ qtd_padarias }} padarias parceiras, {{ qtd_cestas }} tipos de cestas incríveis com {{ qtd_produtos }} produtos disponíveis para você escolher.
+    </p>
   </hgroup>
 </div>
 
 <section class="featured container">
-  <img src="{% static 'images/breadsHome.png' %} " alt="cesta com paes">
+  <img src="{% static 'images/breadsHome.png' %}" alt="cesta com paes">
   <div>
     <h2>Cestas com produtos perfeitos!</h2>
     <p>

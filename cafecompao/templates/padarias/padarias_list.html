@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block conteudo %}  
+
+  <div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %})">
+    <hgroup>
+      <h1>Conheça nossas padarias!</h1>
+    </hgroup>
+  </div>
+
+  {% for padaria in padarias %}
+    <section class="featured container">
+      <img src="{{ padaria.imagem.url }}" alt="padaria">
+      <div>
+        <h2>{{ padaria.nome }}</h2>
+        <ul>
+          <li>Cidade: {{ padaria.endereco.cidade }} </li>
+          <li>Rua: {{ padaria.endereco.rua }} </li>
+          <li>Numero: {{ padaria.endereco.numero }} </li>
+          <li>Bairro: {{ padaria.endereco.bairro }} </li>
+        </ul>
+      </div>
+    </section>
+    {% if not forloop.last %}
+      <hr>
+    {% endif %}
+  {% endfor %}
+ 
+{% endblock %}

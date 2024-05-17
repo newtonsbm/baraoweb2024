@@ -6,8 +6,8 @@
     </span>
     <ul>
       <li><a href="{% url 'home' %}">Principal</a></li>
-      <li><a href="">Padarias</a></li>
       <li><a href="{% url 'cestas_list' %}">Cestas</a></li>
+      <li><a href="{% url 'padarias_list' %}">Padarias</a></li>
       <li><a href="{% url 'about' %}">Sobre</a></li>
     </ul>
     {% if user.is_authenticated %}

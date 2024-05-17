@@ -8,7 +8,8 @@
   <div class="container">
     <div class="cesta-detail">
       <h1>{{ cesta.nome }}</h1>
-      <span class="cesta-preco">{{ cesta.preco }} / mês</span>
+      <p>{{ cesta.descricao }}</p>
+      <span class="cesta-preco">R$ {{ cesta.preco }} / mês</span> 
     </div>
     <img src="{{ cesta.imagem.url }}" alt="imagem da cesta">
   </div>
@@ -35,9 +36,4 @@
   <a href="{% url 'cestas_list' %}" class="btn btn-primary btn-lg">Voltar</a>
 </section>
 
-{% endblock %}
-
-{% block scripts %}
-<script>
-</script>
 {% endblock %}

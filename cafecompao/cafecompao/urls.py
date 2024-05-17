@@ -17,14 +17,15 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
-from django.urls import path, include
+from django.urls import path, include 
 from padarias import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('auth/', include('django.contrib.auth.urls')), 
+    path('auth/', include('django.contrib.auth.urls')),
     path('', views.home, name='home'),
     path('sobre', views.about, name='about'),
+    path('padarias', views.PadariasList.as_view(), name='padarias_list'),
     path('cestas', views.CestasList.as_view(), name='cestas_list'),
     path('cestas/<uuid:pk>/', views.CestasDetail.as_view(), name='cestas_detail'),
     path('minha_conta', views.minha_conta, name='minha_conta'),
@@ -32,6 +33,8 @@ urlpatterns = [
     # ATIVIDADE 9 e 10
     path('assinaturas/criar', views.AssinaturaCreateView.as_view(), name='assinatura_create'),
     path('assinaturas/<pk>/editar', views.AssinaturaUpdateView.as_view(), name='assinatura_update'), 
+    path('assinaturas/<pk>/cancelar', views.AssinaturaDeleteView.as_view(), name='assinatura_delete'), # nova linha
 ] 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

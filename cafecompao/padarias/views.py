@@ -1,20 +1,28 @@
 import datetime
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
+from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.views import generic
 from django.contrib.auth.models import User
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib import messages
 from django.contrib.auth import login
-from django.urls import reverse_lazy
 
-from .models import Padaria, Email, Cesta, Assinatura
+from .models import Padaria, Email, Cesta, Assinatura, Produto
 
-# Create your views here.
 
-def home(request): 
-    return render(request, 'home.html')
+def home(request):
+    qtd_padarias = Padaria.objects.count()
+    qtd_produtos = Produto.objects.count()
+    qtd_cestas = Cesta.objects.count()
+    context = {
+        'qtd_padarias': qtd_padarias,
+        'qtd_produtos': qtd_produtos,
+        'qtd_cestas': qtd_cestas,
+    }
+    return render(request, 'home.html', context)
 
 def about(request):
     qtd_padarias = Padaria.objects.count()
@@ -56,7 +64,6 @@ class CestasList(generic.ListView):
     model = Cesta
     template_name = 'padarias/cestas_list.html'
     context_object_name = 'cestas'
-    paginate_by = 5
 
 def cestas_detail(request, pk):
     """
@@ -74,9 +81,48 @@ class CestasDetail(generic.DetailView):
     template_name = 'padarias/cestas_detail.html'
     context_object_name = 'cesta'
 
-@login_required(login_url='/auth/login/')
+
+@login_required
 def minha_conta(request):
     return render(request, 'padarias/minha_conta.html')
+
+class PadariasList(generic.ListView):
+    model = Padaria
+    template_name = 'padarias/padarias_list.html'
+    context_object_name = 'padarias'
+
+class AssinaturaCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Assinatura
+    fields = ['cesta', 'observacao']
+    template_name = 'padarias/assinatura_form.html'
+    success_url = reverse_lazy('minha_conta')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.data_inicio = datetime.date.today()
+        messages.success(message="Assinatura realizada com sucesso!", request=self.request)
+        return super().form_valid(form)
+
+class AssinaturaUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = Assinatura
+    fields = ['cesta', 'observacao']
+    template_name = 'padarias/assinatura_form_update.html'
+    success_url = reverse_lazy('minha_conta')
+
+    def form_valid(self, form):
+        messages.success(message="Assinatura alterada com sucesso!", request=self.request)
+        return super().form_valid(form)
+
+class AssinaturaDeleteView(LoginRequiredMixin, generic.DeleteView):
+    model = Assinatura
+    template_name = 'padarias/assinatura_cancelar.html'
+    context_object_name = 'assinatura'
+    success_url = reverse_lazy('minha_conta')
+
+    def form_valid(self, form):
+        messages.success(message="Assinatura cancelada com sucesso!", request=self.request)
+        return super().form_valid(form)
+
 
 # ATIVIDADE 9 e 10
 
@@ -91,7 +137,7 @@ def nova_conta(request):
         password2 = request.POST.get('password2')
 
         # validacao
-        erro = None 
+        erro = None
         if password != password2:
             erro = 'Senhas não coincidem.'
         if User.objects.filter(username=username).exists():
@@ -105,26 +151,10 @@ def nova_conta(request):
         try:
             user = User.objects.create_user(username=username, email=email, password=password, first_name=first_name, last_name=last_name)
             login(request, user)
+            messages.success(request, 'Conta criada com sucesso!')
             return redirect('minha_conta')
         except Exception as e:
             erro = str(e)
             print(erro)
             return render(request, 'registration/nova_conta.html', {'erro': erro})
     return render(request, 'registration/nova_conta.html')
-
-class AssinaturaCreateView(LoginRequiredMixin, generic.CreateView):
-    model = Assinatura
-    fields = ['cesta', 'observacao']
-    template_name = 'padarias/assinatura_form.html'
-    success_url = reverse_lazy('minha_conta')
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        form.instance.data_inicio = datetime.date.today()
-        return super().form_valid(form)
- 
-class AssinaturaUpdateView(LoginRequiredMixin, generic.UpdateView):
-    model = Assinatura
-    fields = ['cesta', 'observacao']
-    template_name = 'padarias/assinatura_form_update.html'
-    success_url = reverse_lazy('minha_conta')
