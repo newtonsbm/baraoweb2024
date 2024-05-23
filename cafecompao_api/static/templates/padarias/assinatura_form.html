@@ -1,0 +1,44 @@
+{% extends 'base_logada.html' %}
+{% load static %}
+{% block area_logada %}
+<h1>
+  Cadastrar Nova Assinatura
+</h1>
+<form action="{% url 'assinaturas_create' %}" method="post">
+  {% csrf_token %}
+  {% load crispy_forms_tags %}
+  <!-- OPCAO 1: Renderizando o form inteiro -->
+  <!--
+  {{ form | crispy }}
+  -->
+
+  <!-- OPCAO 2: Renderizando campos especificos com label e input  -->
+  {{ form.cesta | as_crispy_field }}
+  {{ form.observacao | as_crispy_field }}
+
+  <!-- OPCAO 3: Renderizando somente os inputs -->
+  {% load widget_tweaks %}
+  <div class="mb-3">
+    <label for="cesta" class="form-label">Cesta</label>
+    {{ form.cesta | add_class:"form-control" }}
+  </div>
+
+
+  <!-- OPCAO 4: Declarando os campos diretamente para maior controle -->
+  <!--
+  <div class="mb-3">
+    <label for="cesta" class="form-label">Cesta</label>
+    <select name="cesta" class="form-control" id="cesta">
+      {% for cesta_value, cesta_label in form.cesta.field.choices %}
+        <option value="{{ cesta_value }}">{{ cesta_label }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label for="observacao" class="form-label">Observação</label>
+    <textarea class="form-control" id="observacao" name="observacao" rows="10"></textarea>
+  </div>
+  -->
+  <button type="submit" class="btn btn-primary">Assinar</button>
+</form>
+{% endblock %}

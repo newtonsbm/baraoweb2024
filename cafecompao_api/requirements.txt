@@ -1,0 +1,10 @@
+django
+Pillow
+crispy-bootstrap5
+django-crispy-forms
+django-widget-tweaks
+djangorestframework
+django-cors-headers
+django_rest_framework
+django_widget_tweaks
+drf-spectacular

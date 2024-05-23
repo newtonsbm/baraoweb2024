@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block conteudo %}
+
+<div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %})">
+  <hgroup>
+    <h1>Nossa História!</h1>
+    <p>
+      Despertando Alegria e Sabor: A História que Inspirou o Café com Pão.
+    </p>
+  </hgroup>
+</div>
+
+<section class="featured container">
+  <div>
+    <h2>Conheça um pouco sobre nós!</h2>
+    <p>Nossa história começou com a visão de criar algo especial, algo que transcende o cotidiano e transforma a primeira refeição do dia em um momento de deleite. Cada cesta é cuidadosamente preparada, desde os grãos de café selecionados até os pães artesanais feitos com carinho, resultando em uma experiência que envolve todos os sentidos.</p>
+    <p>No Café com Pão, acreditamos na magia de uma mesa bem-posta, na conversa descontraída e no poder transformador de um café da manhã delicioso. Somos uma comunidade que se reúne em torno de sabores autênticos, compartilhando o amor pela tradição e o apreço pelas pequenas coisas que tornam a vida mais doce.
+</p>
+  </div>
+  <img src="{% static 'images/brewCoffee.png' %}" alt="cesta com paes">
+</section>
+
+<section class="social-container">
+  <div class="container">
+    Nos siga nas redes sociais
+    <div class="social">
+      <a href="https://www.facebook.com/cafecompao" target="_blank">
+        <img src="{% static 'images/logos/face.png' %}" alt="facebook">
+      </a>
+      <a href="https://www.instagram.com/cafecompao/" target="_blank">
+        <img src="{% static 'images/logos/instagram.png' %}" alt="instagram">
+      </a>
+      <a href="https://twitter.com/cafecompao" target="_blank">
+        <img src="{% static 'images/logos/pinterest.png' %}" alt="pinterest">
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="container contato">
+  <h2>Fale Conosco!</h2>
+  {% if mensagem_enviada %}
+    <div class="alert alert-success" role="alert">
+      Mensagem enviada com sucesso!!!
+    </div>
+  {% else %}
+    <form action="{% url 'sobre' %}" method="post">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp">
+        <div id="emailHelp" class="form-text">Digite seu email</div>
+      </div>
+      <div class="mb-3">
+        <label for="nome" class="form-label">Nome</label>
+        <input type="text" class="form-control" id="nome" name="nome" aria-describedby="nomeHelp">
+        <div id="nomeHelp" class="form-text">Digite seu nome completo</div>
+      </div>
+      <div class="mb-3">
+        <label for="mensagem" class="form-label">Mensagem:</label>
+        <textarea class="form-control" id="mensagem" name="mensagem" rows="6"></textarea>
+      </div>
+      <button class="btn btn-primary btn-lg" type="submit">Enviar</button>
+    </form>
+  {% endif %}
+</section>
+
+{% endblock %}

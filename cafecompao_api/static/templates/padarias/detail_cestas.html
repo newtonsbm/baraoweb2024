@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block conteudo %}
+
+<section class="hero-detail">
+  <div class="container">
+    <div class="cesta-detail">
+      <h1>{{ cesta.nome }}</h1>
+      <p>{{ cesta.descricao }}</p>
+      <span class="cesta-preco">{{ cesta.preco }} / mês</span>
+    </div>
+    <img src="{{ cesta.imagem.url }}" alt="imagem da cesta">
+  </div>
+</section>
+
+<section class="container cesta-produtos">
+  <h2>Veja os produtos dessa cesta</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Produto</th>
+        <th>Descrição</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for produto in cesta.produtos.all %}
+      <tr>
+        <td>{{ produto.nome }}</td>
+        <td>{{ produto.descricao }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <a href="{% url 'cestas_list' %}" class="btn btn-primary btn-lg">Voltar</a>
+</section>
+
+{% endblock %}

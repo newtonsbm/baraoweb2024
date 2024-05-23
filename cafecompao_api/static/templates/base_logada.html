@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block conteudo %}
+<div class="container" id="area-logada">
+  <aside>
+    {% include 'components/menu_logado.html' %}
+  </aside>
+  <section>
+    {% include 'components/mensagens.html' %} 
+    {% block area_logada %}
+    {% endblock %}
+  </section>
+</div>
+{% endblock %}

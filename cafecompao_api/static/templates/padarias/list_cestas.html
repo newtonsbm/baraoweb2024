@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block conteudo %}
+
+<div id="hero" style="background-image: url({% static 'images/cafepaoHero.png' %})">
+  <hgroup>
+    <h1>Cestas para todos gostos!</h1>
+  </hgroup>
+</div>
+
+<section class="container card-container">
+  {% for cesta in cesta_list %}
+    <a href="{% url "cestas_detail" cesta.id %}" class="card">
+      <img src="{{ cesta.imagem.url }}" alt="cesta">
+      <div class="card-detail">
+        <h3>{{ cesta.nome }}</h3>
+        <p>{{ cesta.descricao }}</p>
+        <span class="preco">{{ cesta.preco }}</span>
+      </div>
+    </a>
+  {% endfor %}
+</section>
+
+{% endblock %}
