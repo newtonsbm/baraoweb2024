@@ -14,7 +14,7 @@ import os
 from pathlib import Path
 
 
-APP_NAME = os.environ.get("FLY_APP_NAME")
+# APP_NAME = os.environ.get("FLY_APP_NAME")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-2r)m$2-ejc%ooeyq4@#3aewp6ym8*jzvxno%+spk0aug5e_r2x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [f"{APP_NAME}.fly.dev"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
